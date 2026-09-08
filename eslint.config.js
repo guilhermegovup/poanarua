@@ -6,7 +6,9 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", ".output", ".vinxi", "mobile"] },
+  // `src/integrations` é gerado pelo Lovable e marcado "do not edit"; lintar
+  // arquivo que a ferramenta reescreve só produz ruído.
+  { ignores: ["dist", ".output", ".vinxi", "src/integrations"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

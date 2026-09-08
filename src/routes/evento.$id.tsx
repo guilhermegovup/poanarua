@@ -152,7 +152,12 @@ function EventPage() {
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <GoEvent event={event} />
-              <FavoriteButton eventId={event.id} eventName={event.name} variant="full" />
+              <FavoriteButton
+                eventId={event.id}
+                eventName={event.name}
+                favorite={event.favorite}
+                variant="full"
+              />
               <Button type="button" variant="outline" onClick={share}>
                 <Share2 className="size-4" />
                 Compartilhar

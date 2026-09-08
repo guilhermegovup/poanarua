@@ -1,8 +1,11 @@
 import type { ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { CalendarPlus, DownloadCloud, LayoutList, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, CalendarPlus, DownloadCloud, LayoutList, ShieldAlert } from "lucide-react";
 
 import { Brand } from "@/components/layout/brand";
+import { Button } from "@/components/ui/button";
+import { isRemote } from "@/data/supabase";
+import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
 const LINKS: {
@@ -16,9 +19,28 @@ const LINKS: {
   { to: "/admin/evento/novo", label: "Novo evento", icon: CalendarPlus },
 ];
 
-/** Casca do webadmin: navegação própria, sem as tabs do site público. */
+/**
+ * Casca do webadmin.
+ *
+ * A porta de verdade são as policies do banco: sem estar na tabela `admins`,
+ * nenhuma escrita passa e a leitura só devolve evento publicado. Esta barreira
+ * é de interface — evita que alguém sem permissão veja uma tela quebrada.
+ */
 export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const { isAdmin, loading } = useAuth();
+
+  if (isRemote && loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-secondary/30">
+        <div className="h-8 w-40 animate-pulse rounded bg-secondary" />
+      </div>
+    );
+  }
+
+  if (isRemote && !isAdmin) {
+    return <AccessDenied />;
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-secondary/30">
@@ -62,6 +84,27 @@ export function AdminShell({ children }: { children: ReactNode }) {
       </header>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">{children}</main>
+    </div>
+  );
+}
+
+function AccessDenied() {
+  const { user } = useAuth();
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-secondary/30 px-4">
+      <div className="max-w-md rounded-xl border border-border bg-background p-8 text-center">
+        <ShieldAlert className="mx-auto size-10 text-muted-foreground" />
+        <h1 className="mt-4 text-xl font-bold">Área restrita</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {user
+            ? "Tua conta não tem permissão de administrador."
+            : "Entra com uma conta de administrador para continuar."}
+        </p>
+        <Button asChild className="mt-6">
+          <Link to={user ? "/" : "/perfil"}>{user ? "Voltar ao site" : "Entrar"}</Link>
+        </Button>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { CalendarPlus, Heart, Info, LogOut, Trash2 } from "lucide-react";
+import { CalendarPlus, Heart, Info, LogOut, ShieldCheck, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/layout/app-shell";
@@ -10,10 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/data/api";
+import { signIn, signOut, signUp } from "@/data/auth";
 import { SITE } from "@/data/config";
-import { store } from "@/data/store";
+import { isRemote } from "@/data/supabase";
+import { useAuth } from "@/hooks/use-auth";
 import { queryKeys, useMyEvents } from "@/hooks/use-events";
-import { useFavoriteCount, useUser } from "@/hooks/use-store";
+import { useFavoriteCount } from "@/hooks/use-store";
 import { formatShortDate, initials } from "@/lib/format";
 
 export const Route = createFileRoute("/perfil")({
@@ -24,58 +26,96 @@ export const Route = createFileRoute("/perfil")({
 });
 
 function ProfilePage() {
-  const user = useUser();
+  const { user, loading } = useAuth();
 
   return (
     <AppShell>
-      <div className="mx-auto w-full max-w-2xl px-4 py-8">{user ? <Profile /> : <SignIn />}</div>
+      <div className="mx-auto w-full max-w-2xl px-4 py-8">
+        {loading ? (
+          <div className="h-40 animate-pulse rounded-xl bg-secondary" />
+        ) : user ? (
+          <Profile />
+        ) : (
+          <SignIn />
+        )}
+      </div>
     </AppShell>
   );
 }
 
-/**
- * O app original tinha login por e-mail, Facebook, Google e Apple. Aqui fica
- * só o e-mail: os logins sociais precisam de chaves de projeto próprias, e a
- * sessão local já libera favoritar, marcar presença e cadastrar evento.
- */
 function SignIn() {
+  const { refresh } = useAuth();
+  const [mode, setMode] = useState<"entrar" | "criar">("entrar");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  function submit(formEvent: React.FormEvent) {
+  async function submit(formEvent: React.FormEvent) {
     formEvent.preventDefault();
 
-    if (!email.trim()) {
-      toast("O campo email deve ser preenchido");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
-      toast("Email inválido");
+    const erro = !email.trim()
+      ? "O campo email deve ser preenchido"
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())
+        ? "Email inválido"
+        : isRemote && password.length < 6
+          ? "A senha deve conter no mínimo 6 caracteres"
+          : mode === "criar" && !name.trim()
+            ? "Como podemos te chamar?"
+            : null;
+
+    if (erro) {
+      toast(erro);
       return;
     }
 
-    store.signIn(email.trim(), name.trim() || undefined);
-    toast(`Bem-vindo ao Poa na Rua${name ? `, ${name.split(" ")[0]}` : ""}!`);
+    setBusy(true);
+    try {
+      if (mode === "criar") {
+        const { needsConfirmation } = await signUp(email.trim(), password, name.trim());
+        if (needsConfirmation) {
+          toast("Confirma teu e-mail", {
+            description: "Mandamos um link para validar a conta.",
+          });
+          setMode("entrar");
+        } else {
+          await refresh();
+          toast(`Bem-vindo ao Poa na Rua, ${name.split(" ")[0]}!`);
+        }
+      } else {
+        const session = await signIn(email.trim(), password);
+        await refresh();
+        toast(`Bem-vindo de volta, ${session.user.name.split(" ")[0]}!`);
+      }
+    } catch (error) {
+      toast((error as Error).message);
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
     <>
-      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Entrar</h1>
+      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        {mode === "entrar" ? "Entrar" : "Criar conta"}
+      </h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Para favoritar, marcar presença e cadastrar teus eventos.
       </p>
 
       <form onSubmit={submit} className="mt-6 space-y-4 rounded-xl border border-border p-5">
-        <div className="space-y-2">
-          <Label htmlFor="name">Nome</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="Como podemos te chamar?"
-            autoComplete="name"
-          />
-        </div>
+        {mode === "criar" && (
+          <div className="space-y-2">
+            <Label htmlFor="name">Nome</Label>
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Como podemos te chamar?"
+              autoComplete="name"
+            />
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor="email">E-mail</Label>
@@ -83,35 +123,59 @@ function SignIn() {
             id="email"
             type="email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="voce@email.com"
             autoComplete="email"
           />
         </div>
 
-        <Button type="submit" className="w-full">
-          Entrar
+        {isRemote && (
+          <div className="space-y-2">
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete={mode === "criar" ? "new-password" : "current-password"}
+            />
+          </div>
+        )}
+
+        <Button type="submit" className="w-full" disabled={busy}>
+          {busy ? "..." : mode === "entrar" ? "Entrar" : "Criar conta"}
         </Button>
 
-        <p className="text-xs text-muted-foreground">
-          A sessão fica só neste navegador — nada é enviado para nenhum servidor enquanto a API do
-          Poa na Rua estiver fora do ar.
-        </p>
+        <button
+          type="button"
+          onClick={() => setMode(mode === "entrar" ? "criar" : "entrar")}
+          className="w-full text-center text-sm text-primary hover:underline"
+        >
+          {mode === "entrar" ? "Ainda não tem conta? Cria a tua" : "Já tenho conta"}
+        </button>
+
+        {!isRemote && (
+          <p className="text-xs text-muted-foreground">
+            A sessão fica só neste navegador — o banco de dados ainda não está ligado.
+          </p>
+        )}
       </form>
     </>
   );
 }
 
 function Profile() {
-  const user = useUser()!;
+  const { user, isAdmin, refresh } = useAuth();
   const favorites = useFavoriteCount();
   const { data: myEvents = [] } = useMyEvents();
   const queryClient = useQueryClient();
 
+  if (!user) return null;
+
   async function remove(id: number, name: string) {
     await api.deleteEvent(id);
-    queryClient.invalidateQueries({ queryKey: queryKeys.myEvents });
-    queryClient.invalidateQueries({ queryKey: queryKeys.events });
+    await queryClient.invalidateQueries({ queryKey: queryKeys.myEvents });
+    await queryClient.invalidateQueries({ queryKey: queryKeys.events });
     toast("Evento deletado com sucesso!", { description: name });
   }
 
@@ -129,8 +193,9 @@ function Profile() {
           variant="ghost"
           size="sm"
           className="ml-auto shrink-0"
-          onClick={() => {
-            store.signOut();
+          onClick={async () => {
+            await signOut();
+            await refresh();
             toast("Até a próxima!");
           }}
         >
@@ -156,6 +221,18 @@ function Profile() {
           <Info className="size-5 text-primary" />
           <span className="flex-1 font-medium">Sobre o Poa na Rua</span>
         </Link>
+
+        {/*
+          Atalho do webadmin. Só existe para quem está na tabela `admins`, então
+          é invisível para o público sem depender de esconder a URL — o /admin
+          já é protegido pelas policies do banco de qualquer jeito.
+        */}
+        {isAdmin && (
+          <Link to="/admin" className="flex items-center gap-3 px-4 py-4 text-sm hover:bg-accent">
+            <ShieldCheck className="size-5 text-primary" />
+            <span className="flex-1 font-medium">Administrar eventos</span>
+          </Link>
+        )}
       </nav>
 
       <h2 className="mt-10 text-lg font-bold">Meus eventos cadastrados</h2>

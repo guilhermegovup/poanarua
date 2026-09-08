@@ -7,6 +7,7 @@ export const queryKeys = {
   events: ["events"] as const,
   event: (id: number) => ["event", id] as const,
   categories: ["categories"] as const,
+  favorites: ["favorites"] as const,
   evaluations: (id: number) => ["evaluations", id] as const,
   myEvents: ["my-events"] as const,
 };

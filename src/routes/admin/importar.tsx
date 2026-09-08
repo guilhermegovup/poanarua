@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
 import { api } from "@/data/api";
+import { isRemote } from "@/data/supabase";
 import type { EventItem } from "@/data/types";
 import { queryKeys } from "@/hooks/use-events";
 import { collectEvents } from "@/ingest/server";
@@ -93,10 +94,17 @@ function ImportPage() {
           ))}
         </ul>
 
-        <Button onClick={run} disabled={running} className="mt-4">
+        <Button onClick={run} disabled={running || !isRemote} className="mt-4">
           <DownloadCloud className="size-4" />
           {running ? "Buscando..." : "Buscar eventos agora"}
         </Button>
+
+        {!isRemote && (
+          <p className="mt-3 text-xs text-muted-foreground">
+            A importação precisa do banco ligado: o coletor roda no servidor e só aceita
+            administrador autenticado.
+          </p>
+        )}
       </div>
 
       {error && (

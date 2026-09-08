@@ -8,13 +8,12 @@ import { EventForm } from "@/components/admin/event-form";
 import { STATUS_LABEL, StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { api } from "@/data/api";
-import { store } from "@/data/store";
 import type { EventStatus } from "@/data/types";
 import { queryKeys } from "@/hooks/use-events";
 
 export const Route = createFileRoute("/admin/evento/$id")({
-  loader: ({ params }) => {
-    const event = store.event(Number(params.id));
+  loader: async ({ params }) => {
+    const event = await api.event(Number(params.id));
     if (!event) throw notFound();
     return { event };
   },
