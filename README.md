@@ -31,6 +31,9 @@ npm i
 npm run dev
 ```
 
+Outros comandos: `npm run lint`, `npm test` (vitest, cobre o coletor) e
+`npm run build`.
+
 ## O site
 
 | Rota | O que é |
@@ -43,6 +46,19 @@ npm run dev
 | `/perfil` | Sessão, meus eventos cadastrados |
 | `/cadastrar-evento` | Cadastro aberto de eventos |
 | `/sobre` | História do projeto e contatos |
+| `/admin` | Webadmin: fila de revisão, publicar, ocultar, editar, excluir |
+| `/admin/importar` | Roda o coletor e manda o que achou para a fila |
+| `/admin/evento/novo` · `/admin/evento/$id` | Cadastro e edição |
+
+### Alimentação automática
+
+Um coletor visita fontes de agenda da cidade, extrai os eventos e coloca cada um
+na **fila de revisão** — nada vai ao ar sem alguém aprovar no webadmin. Ele lê
+`schema.org/Event` (JSON-LD) e feeds RSS/Atom, que é o que a maioria dos portais
+publica, e roda no servidor para não esbarrar em CORS.
+
+Somar uma fonte é criar um arquivo em `src/ingest/sources/`. Veja
+[`docs/COLETOR.md`](docs/COLETOR.md).
 
 ### Dados
 
@@ -57,6 +73,19 @@ cadastrados no `localStorage`. Para voltar a falar com o backend real:
 ```sh
 VITE_USE_MOCK=false npm run dev
 ```
+
+Para sair do `localStorage` e ter dados compartilhados, o schema Postgres está
+em [`supabase/migrations/0001_eventos.sql`](supabase/migrations/0001_eventos.sql),
+com RLS: o público lê só evento publicado, escrever é de quem está na tabela
+`admins`.
+
+### PWA
+
+O site é instalável: `public/manifest.webmanifest`, ícones gerados do vetor da
+marca e um service worker próprio em `public/sw.js` — rede primeiro para
+navegação (nunca serve HTML velho), cache primeiro para assets com hash e
+imagens, e uma página `/offline` quando não há conexão. O `/admin` nunca é
+cacheado. O service worker só registra em produção.
 
 ### Marca
 
@@ -80,3 +109,6 @@ foi parar no código.
 - **Push e analytics**: eram Firebase no app nativo; aqui não há equivalente.
 - **Upload de imagem**: o cadastro aceita link de imagem em vez de upload,
   porque não existe backend de arquivos no ar.
+- **Autenticação do admin**: enquanto o banco não estiver ligado, `/admin` não
+  tem login — qualquer pessoa com o endereço entra. O schema já traz a tabela
+  `admins` e as policies; a proteção real vem junto com o Supabase.

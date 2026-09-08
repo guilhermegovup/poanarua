@@ -1,0 +1,23 @@
+{
+  "name": "Poa na Rua",
+  "short_name": "Poa na Rua",
+  "description": "Tudo que acontece em Porto Alegre: feiras, eventos de rua, shows, gastronomia e programação para crianças.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#b32f4c",
+  "categories": ["events", "lifestyle", "travel"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Hoje tem", "url": "/", "description": "O que rola hoje na cidade" },
+    { "name": "Buscar eventos", "url": "/busca" },
+    { "name": "Meus favoritos", "url": "/favoritos" }
+  ]
+}

@@ -1,4 +1,12 @@
-import type { Evaluation, EventItem, EventPayload, GalleryImage, GoEventUser, User } from "./types";
+import type {
+  Evaluation,
+  EventItem,
+  EventPayload,
+  EventStatus,
+  GalleryImage,
+  GoEventUser,
+  User,
+} from "./types";
 import * as seed from "./seed";
 
 /**
@@ -93,17 +101,29 @@ function brToday() {
   return `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}`;
 }
 
+/** Dados legados não têm `status`; quem não tem é porque já estava no ar. */
+function isPublished(event: EventItem): boolean {
+  return (event.status ?? "published") === "published";
+}
+
 export const store = {
+  /** O que o site mostra: só o que está publicado. */
   events(): EventItem[] {
+    return store.allEvents().filter(isPublished);
+  },
+
+  /** Tudo, inclusive pendente, oculto e rejeitado. Só o webadmin usa. */
+  allEvents(): EventItem[] {
     const state = read();
     return state.events.map((event) => ({
       ...event,
+      status: event.status ?? "published",
       favorite: state.favorites.includes(event.id),
     }));
   },
 
   event(id: number): EventItem | undefined {
-    return store.events().find((event) => event.id === id);
+    return store.allEvents().find((event) => event.id === id);
   },
 
   categories: () => seed.categories,
@@ -306,6 +326,59 @@ export const store = {
     mutate((draft) => {
       draft.events = draft.events.filter((event) => event.id !== id);
     });
+  },
+
+  /* --------------------------------------------------------------- webadmin */
+
+  setStatus(id: number, status: EventStatus) {
+    mutate((draft) => {
+      const event = draft.events.find((item) => item.id === id);
+      if (event) event.status = status;
+    });
+  },
+
+  setStatusMany(ids: number[], status: EventStatus) {
+    const wanted = new Set(ids);
+    mutate((draft) => {
+      draft.events.forEach((event) => {
+        if (wanted.has(event.id)) event.status = status;
+      });
+    });
+  },
+
+  deleteMany(ids: number[]) {
+    const wanted = new Set(ids);
+    mutate((draft) => {
+      draft.events = draft.events.filter((event) => !wanted.has(event.id));
+    });
+  },
+
+  /** Chaves de dedupe já na base, para o coletor não trazer repetido. */
+  knownDedupeKeys(): Set<string> {
+    return new Set(
+      read()
+        .events.map((event) => event.dedupe_key)
+        .filter((key): key is string => Boolean(key)),
+    );
+  },
+
+  /**
+   * Guarda o que o coletor trouxe. Já veio deduplicado contra a base, então
+   * aqui só descartamos colisão de chave por segurança.
+   */
+  importEvents(events: EventItem[]): number {
+    const known = store.knownDedupeKeys();
+    const novos = events.filter((event) => !event.dedupe_key || !known.has(event.dedupe_key));
+    if (!novos.length) return 0;
+
+    mutate((draft) => {
+      let id = draft.nextId;
+      const prepared = novos.map((event) => ({ ...event, id: id++ }));
+      draft.nextId = id;
+      draft.events = [...prepared, ...draft.events];
+    });
+
+    return novos.length;
   },
 
   reset() {

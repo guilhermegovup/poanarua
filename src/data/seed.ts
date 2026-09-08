@@ -36,12 +36,15 @@ const br = (isoDate: string) => {
 };
 
 export const categories: Category[] = [
-  { id: 22, name: "FEIRAS MODELO E ORGÂNICAS", order: 1, seed: "poa-feira-organica" },
-  { id: 40, name: "EVENTOS DE RUA", order: 2, seed: "poa-evento-rua" },
-  { id: 41, name: "MÚSICA E SHOWS", order: 3, seed: "poa-musica" },
-  { id: 42, name: "GASTRONOMIA", order: 4, seed: "poa-gastronomia" },
-  { id: 43, name: "PARQUES E PRAÇAS", order: 5, seed: "poa-parques" },
-  { id: 44, name: "ARTE E CULTURA", order: 6, seed: "poa-arte" },
+  { id: 47, name: "PARA CRIANÇAS", order: 1, seed: "poa-criancas" },
+  { id: 22, name: "FEIRAS ORGÂNICAS E ECOLÓGICAS", order: 2, seed: "poa-feira-organica" },
+  { id: 45, name: "ARTESANATO E BRECHÓ", order: 3, seed: "poa-artesanato" },
+  { id: 40, name: "EVENTOS DE RUA", order: 4, seed: "poa-evento-rua" },
+  { id: 41, name: "MÚSICA E SHOWS", order: 5, seed: "poa-musica" },
+  { id: 42, name: "GASTRONOMIA", order: 6, seed: "poa-gastronomia" },
+  { id: 46, name: "PONTOS TURÍSTICOS", order: 7, seed: "poa-turismo" },
+  { id: 43, name: "PARQUES E PRAÇAS", order: 8, seed: "poa-parques" },
+  { id: 44, name: "ARTE E CULTURA", order: 9, seed: "poa-arte" },
 ].map(({ seed: imageSeed, ...category }) => ({
   ...category,
   name_image: `${category.name.toLowerCase()}.png`,

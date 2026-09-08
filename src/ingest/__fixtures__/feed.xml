@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Destino POA — Agenda</title>
+    <link>https://destinopoa.com.br</link>
+    <item>
+      <title><![CDATA[Feira de Artesanato da Praça da Alfândega]]></title>
+      <link>https://destinopoa.com.br/eventos/feira-artesanato-alfandega</link>
+      <guid>https://destinopoa.com.br/?p=4821</guid>
+      <pubDate>Sat, 17 Oct 2026 09:00:00 -0300</pubDate>
+      <category>Artesanato</category>
+      <category>Ao ar livre</category>
+      <description><![CDATA[<img src="/uploads/alfandega.jpg" /><p>Artes&atilde;os de Porto Alegre das 9h &agrave;s 18h na Pra&ccedil;a da Alf&acirc;ndega.</p>]]></description>
+    </item>
+    <item>
+      <title>Show da Orquestra na Usina do Gasômetro</title>
+      <link>https://destinopoa.com.br/eventos/orquestra-gasometro</link>
+      <pubDate>Sun, 18 Oct 2026 19:00:00 -0300</pubDate>
+      <description>Concerto gratuito ao pôr do sol, das 19h às 21h.</description>
+    </item>
+  </channel>
+</rss>
