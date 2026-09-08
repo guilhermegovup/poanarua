@@ -60,6 +60,7 @@ export function EventRow({ event }: { event: EventItem }) {
       <FavoriteButton
         eventId={event.id}
         eventName={event.name}
+        favorite={event.favorite}
         className="absolute right-3 top-3 z-10"
       />
     </article>

@@ -74,10 +74,32 @@ cadastrados no `localStorage`. Para voltar a falar com o backend real:
 VITE_USE_MOCK=false npm run dev
 ```
 
-Para sair do `localStorage` e ter dados compartilhados, o schema Postgres está
-em [`supabase/migrations/0001_eventos.sql`](supabase/migrations/0001_eventos.sql),
-com RLS: o público lê só evento publicado, escrever é de quem está na tabela
-`admins`.
+Com o **Lovable Cloud** ligado, os dados vêm do Postgres e são compartilhados
+entre todo mundo. O site escolhe a origem sozinho: existindo
+`VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`, fala com o banco; sem
+elas, cai no `localStorage` para o preview continuar navegável.
+
+As migrations estão em `supabase/migrations/`, em ordem:
+
+| Arquivo | O que cria |
+| --- | --- |
+| `0001_eventos.sql` | Tabelas, RLS, categorias e tags |
+| `0002_profiles.sql` | Perfis públicos e as chaves que permitem aninhar o perfil nas consultas |
+
+O RLS é a segurança de verdade: o público lê só evento publicado, escrever é de
+quem está na tabela `admins`.
+
+#### Virar administrador
+
+Cadastre-se pelo site normalmente e depois rode, no SQL editor:
+
+```sql
+insert into admins (user_id)
+select id from auth.users where email = 'seu@email.com';
+```
+
+Feito isso, aparece um atalho **Administrar eventos** na aba Perfil — visível só
+para quem é admin. Nenhuma senha vive no código.
 
 ### PWA
 
@@ -109,6 +131,6 @@ foi parar no código.
 - **Push e analytics**: eram Firebase no app nativo; aqui não há equivalente.
 - **Upload de imagem**: o cadastro aceita link de imagem em vez de upload,
   porque não existe backend de arquivos no ar.
-- **Autenticação do admin**: enquanto o banco não estiver ligado, `/admin` não
-  tem login — qualquer pessoa com o endereço entra. O schema já traz a tabela
-  `admins` e as policies; a proteção real vem junto com o Supabase.
+- **Sem banco, `/admin` não tem login**: rodando só com `localStorage` não há o
+  que proteger nem como. Com o Lovable Cloud ligado, a proteção é o RLS.
+- **Galeria de fotos do evento**: as tabelas existem, a tela ainda não.

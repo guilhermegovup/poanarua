@@ -1,37 +1,47 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Hand } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@/data/api";
+import { isRemote } from "@/data/supabase";
 import type { EventItem } from "@/data/types";
-import { useGoEventCount, useIsGoing, useUser } from "@/hooks/use-store";
+import { useAuth } from "@/hooks/use-auth";
+import { useIsGoing } from "@/hooks/use-store";
 import { initials } from "@/lib/format";
-import { store } from "@/data/store";
 import { cn } from "@/lib/utils";
 
 /** "Eu vou" + quem já confirmou, como na tela de evento do app. */
 export function GoEvent({ event }: { event: EventItem }) {
-  const going = useIsGoing(event.id);
-  const count = useGoEventCount(event.id);
-  const user = useUser();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
+  const goingLocal = useIsGoing(event.id);
 
-  const users = store.goEventUsers(event.id);
+  const { data: users = [] } = useQuery({
+    queryKey: ["go-event", event.id],
+    queryFn: () => api.goEventUsers(event.id),
+  });
+
+  // Com banco, "eu vou" se descobre pela própria lista de presenças.
+  const going = isRemote ? users.some((person) => person.name === user?.name) : goingLocal;
+
   const label = event.event_date ? "Eu vou" : "Recomendo";
 
   async function toggle() {
     if (!user) {
       toast("Para marcar presença, entra na tua conta.", {
         description: "É rapidinho, só o e-mail.",
-        action: { label: "Entrar", onClick: () => (window.location.href = "/perfil") },
       });
       return;
     }
 
-    const next = await api.toggleGoEvent(event.id);
-    queryClient.invalidateQueries({ queryKey: ["events"] });
-    toast(next ? "Bora! Presença confirmada." : "Presença desmarcada.");
+    try {
+      const next = await api.toggleGoEvent(event.id);
+      await queryClient.invalidateQueries({ queryKey: ["go-event", event.id] });
+      toast(next ? "Bora! Presença confirmada." : "Presença desmarcada.");
+    } catch (error) {
+      toast((error as Error).message);
+    }
   }
 
   return (
@@ -46,7 +56,7 @@ export function GoEvent({ event }: { event: EventItem }) {
         {going ? "Tu vai!" : label}
       </Button>
 
-      {count > 0 && (
+      {users.length > 0 && (
         <div className="flex items-center gap-2">
           <ul className="flex -space-x-2">
             {users.slice(0, 5).map((person) =>
@@ -70,7 +80,7 @@ export function GoEvent({ event }: { event: EventItem }) {
             )}
           </ul>
           <span className="text-sm text-muted-foreground">
-            {count === 1 ? "1 pessoa vai" : `${count} pessoas vão`}
+            {users.length === 1 ? "1 pessoa vai" : `${users.length} pessoas vão`}
           </span>
         </div>
       )}

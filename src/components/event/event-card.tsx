@@ -60,6 +60,7 @@ export function EventCard({ event, className }: Props) {
       <FavoriteButton
         eventId={event.id}
         eventName={event.name}
+        favorite={event.favorite}
         className="absolute right-2 top-2 z-10 sm:opacity-0 sm:transition sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
       />
     </article>
