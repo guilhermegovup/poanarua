@@ -60,9 +60,18 @@ VITE_USE_MOCK=false npm run dev
 
 ### Marca
 
-O logo é o vetor original da marca, servido de `public/logo-poa-na-rua.svg`. Os
-tokens de cor em `src/styles.css` saíram do app publicado — a cor primária
+O logo é o vetor original, servido de `public/logo-poa-na-rua.svg`. Os
+arquivos-mestre (EPS e SVG) e os comandos de rasterização estão em
+[`brand/`](brand/).
+
+Os tokens de cor em `src/styles.css` saíram do app publicado — a cor primária
 `#b32f4c` é o `COLOR_MAIN` do APK.
+
+### De onde veio o conteúdo
+
+[`docs/RECRIACAO.md`](docs/RECRIACAO.md) registra o que foi extraído do APK
+(navegação, textos, paleta, modelos de dados, contrato de API) e onde cada parte
+foi parar no código.
 
 ### O que ficou de fora
 
@@ -71,13 +80,3 @@ tokens de cor em `src/styles.css` saíram do app publicado — a cor primária
 - **Push e analytics**: eram Firebase no app nativo; aqui não há equivalente.
 - **Upload de imagem**: o cadastro aceita link de imagem em vez de upload,
   porque não existe backend de arquivos no ar.
-
-## App mobile
-
-O aplicativo nativo do Poa na Rua — recriado a partir do APK 2.7.1 publicado na
-Play Store — vive em [`mobile/`](mobile/), em Expo + React Native + TypeScript,
-com ciclo de vida próprio (`cd mobile && npm install && npm start`).
-
-Ele não interfere neste projeto web: a raiz continua sendo o projeto do Lovable.
-Veja [`mobile/README.md`](mobile/README.md) e
-[`mobile/docs/RECRIACAO.md`](mobile/docs/RECRIACAO.md).

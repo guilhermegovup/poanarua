@@ -6,8 +6,8 @@ Arquivos-mestre do logo do Poa na Rua.
   verdade; qualquer novo tamanho sai daqui.
 - `logo.svg` — o mesmo vetor em SVG, para uso em web e ferramentas de design.
 
-Os PNGs do app (`src/assets/logo.png`, `src/assets/logo_poa.png` e os ícones em
-`assets/`) são rasterizados a partir do EPS:
+O site usa o SVG direto, servido de `public/logo-poa-na-rua.svg`. Para gerar
+PNGs (ícone de app, open graph, material impresso), rasterize a partir do EPS:
 
 ```sh
 # logo transparente, em qualquer tamanho (dpi = tamanho / 340 * 72)
@@ -38,6 +38,6 @@ gs -q -dNOPAUSE -dBATCH -sDEVICE=pngalpha \
 | Amarelo | `#fdb211` / `#ffcd3d` |
 | Branco | `#fffeff` |
 
-O `COLOR_MAIN` da interface (`#b32f4c`, em `src/styles/colors.ts`) vem do bundle
-do APK e é ligeiramente diferente do vinho do logo — foi mantido como estava no
-app publicado.
+A cor primária da interface (`#b32f4c`, definida como `--brand-wine` em
+`src/styles.css`) vem do bundle do APK e é ligeiramente diferente do vinho do
+logo — foi mantida como estava no app publicado.
