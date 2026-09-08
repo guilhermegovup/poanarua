@@ -75,7 +75,7 @@ function SearchPage() {
           aria-label="Buscar eventos"
         />
 
-        <div className="no-scrollbar -mx-4 mt-4 flex gap-2 overflow-x-auto px-4 pb-1">
+        <div className="no-scrollbar fade-edge -mx-4 mt-4 flex gap-2 overflow-x-auto px-4 pb-1">
           <FilterChip active={onlyUpcoming} onClick={() => setOnlyUpcoming((v) => !v)}>
             Só o que vem por aí
           </FilterChip>
@@ -129,10 +129,12 @@ function FilterChip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold transition",
+        // 44px de altura: mesmo alvo de toque dos filtros da home
+        "flex h-11 shrink-0 items-center rounded-full border px-4 text-sm font-semibold",
+        "transition-[background-color,border-color,color] duration-200",
         active
           ? "border-primary bg-primary text-primary-foreground"
-          : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground",
+          : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:bg-accent hover:text-foreground",
       )}
     >
       {children}

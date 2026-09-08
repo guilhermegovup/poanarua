@@ -1,12 +1,12 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ArrowUpRight, CalendarPlus, DownloadCloud, LayoutList, ShieldAlert } from "lucide-react";
 
 import { Brand } from "@/components/layout/brand";
 import { Button } from "@/components/ui/button";
+import { signOut } from "@/data/auth";
 import { isRemote } from "@/data/supabase";
 import { useAuth } from "@/hooks/use-auth";
-import { isAdmUnlocked, lockAdm } from "@/lib/admin-gate";
 import { cn } from "@/lib/utils";
 
 const LINKS: {
@@ -29,25 +29,16 @@ const LINKS: {
  */
 export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const { isAdmin, loading } = useAuth();
+  const { session, isAdmin, loading, refresh } = useAuth();
   const navigate = useNavigate();
-  const [unlocked, setUnlocked] = useState<boolean | null>(null);
 
+  // Sem sessão nenhuma, manda para a entrada em vez de mostrar "sem permissão":
+  // quem chegou aqui direto pela URL só precisa entrar.
   useEffect(() => {
-    const ok = isAdmUnlocked();
-    setUnlocked(ok);
-    if (!ok) navigate({ to: "/adm", replace: true });
-  }, [navigate]);
+    if (isRemote && !loading && !session) navigate({ to: "/adm", replace: true });
+  }, [loading, navigate, session]);
 
-  if (unlocked !== true) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-secondary/30">
-        <div className="h-8 w-40 animate-pulse rounded bg-secondary" />
-      </div>
-    );
-  }
-
-  if (isRemote && loading) {
+  if (isRemote && (loading || !session)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-secondary/30">
         <div className="h-8 w-40 animate-pulse rounded bg-secondary" />
@@ -100,11 +91,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
           <button
             type="button"
-            onClick={() => {
-              lockAdm();
+            onClick={async () => {
+              await signOut();
+              await refresh();
               navigate({ to: "/adm", replace: true });
             }}
-            className="shrink-0 text-sm text-muted-foreground hover:text-foreground"
+            className="-my-2 shrink-0 py-2 text-sm text-muted-foreground hover:text-foreground"
           >
             Sair
           </button>

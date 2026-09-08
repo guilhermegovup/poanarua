@@ -33,7 +33,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/92 backdrop-blur-lg md:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <ul className="mx-auto flex max-w-lg items-stretch">
@@ -47,14 +47,24 @@ export function BottomNav() {
                 to={item.to}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
-                  active ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                  // 56px de altura: alvo confortável de polegar com rótulo
+                  "relative flex h-14 flex-col items-center justify-center gap-1 text-[11px] font-medium",
+                  "transition-colors duration-200",
+                  active ? "text-primary" : "text-muted-foreground active:text-foreground",
                 )}
               >
+                {/* Traço curto no topo marca a aba ativa sem depender só de cor. */}
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute inset-x-4 top-0 h-0.5 rounded-full transition-opacity duration-200",
+                    active ? "bg-primary opacity-100" : "opacity-0",
+                  )}
+                />
                 <span className="relative">
                   <Icon className="size-5" strokeWidth={active ? 2.4 : 2} />
                   {item.badge && favorites > 0 && (
-                    <span className="absolute -right-2 -top-1 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+                    <span className="absolute -right-2.5 -top-1.5 flex min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold leading-4 text-primary-foreground">
                       {favorites > 9 ? "9+" : favorites}
                     </span>
                   )}

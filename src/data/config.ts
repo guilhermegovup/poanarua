@@ -18,6 +18,16 @@ export const CONTACT = {
   PLAY_STORE: "https://play.google.com/store/apps/details?id=com.guiipf.poanaruaoficial",
 } as const;
 
+/**
+ * Conta que administra a plataforma.
+ *
+ * O login do /adm pede só a senha; o e-mail sai daqui. Não é segredo — é o
+ * mesmo contato que aparece na página Sobre. O que protege é a senha, que
+ * nunca vive no código: quem confere é o Supabase Auth.
+ */
+export const ADMIN_EMAIL =
+  (import.meta.env["VITE_ADMIN_EMAIL"] as string | undefined) ?? CONTACT.EMAIL;
+
 export const SITE = {
   name: "Poa na Rua",
   tagline: "Tudo que acontece em Porto Alegre",

@@ -103,7 +103,11 @@ export function Opinions({ eventId }: { eventId: number }) {
           ))}
         </div>
 
+        <label htmlFor="opiniao" className="sr-only">
+          Teu comentário sobre o evento
+        </label>
         <Textarea
+          id="opiniao"
           value={comment}
           onChange={(changeEvent) => setComment(changeEvent.target.value)}
           placeholder="Conta pra gente como foi..."
