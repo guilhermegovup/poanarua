@@ -56,8 +56,13 @@ com os mesmos nomes. A cor de marca é `COLOR_MAIN: #b32f4c`.
 
 As imagens do app foram recuperadas de `res/drawable-*` (o Metro renomeia
 `src/assets/logo.png` para `src_assets_logo.png` no build) e estão em
-`src/assets`: `logo`, `logo_poa`, `login_background`, `image_profile`, `add`,
-`nav_maps`, `nav_waze`, `applemaps` e os quatro ícones de contato do "Sobre".
+`src/assets`: `login_background`, `image_profile`, `nav_maps`, `nav_waze`,
+`applemaps` e os quatro ícones de contato do "Sobre".
+
+O logo é a exceção: o APK só trazia PNG rasterizado e desfocado, então ele foi
+substituído pelo vetor original da marca (`src/assets/brand/Logo_Poa_na_Rua.eps`).
+Todos os PNGs de logo e os ícones do app são gerados a partir dele — veja
+`src/assets/brand/README.md` para os comandos e a paleta do vetor.
 
 Medidas de layout (alturas dos cards, raios, espaçamentos) foram lidas dos
 `styled-components` do bundle e reproduzidas: carrossel de 400px, cards do
