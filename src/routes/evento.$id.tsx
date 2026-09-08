@@ -95,8 +95,8 @@ function EventPage() {
           </Button>
         </div>
 
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="min-w-0">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-x-10 lg:gap-y-12">
+          <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
             <div className="flex flex-wrap gap-2">
               {event.categories.map((category) => (
                 <Link key={category.id} to="/categoria/$id" params={{ id: String(category.id) }}>
@@ -193,7 +193,7 @@ function EventPage() {
                           href={flag.link}
                           target="_blank"
                           rel="noreferrer noopener"
-                          className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                          className="-my-1 inline-flex items-center gap-2 py-1 text-sm font-medium text-primary hover:underline"
                         >
                           {flag.name}
                           <ExternalLink className="size-3.5" />
@@ -206,13 +206,11 @@ function EventPage() {
                 </ul>
               </div>
             )}
-
-            <hr className="my-10 border-border" />
-
-            <Opinions eventId={event.id} />
           </div>
 
-          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          {/* No celular vem antes das opiniões: quem está na rua quer saber
+              onde é e como chegar, não ler comentário primeiro. */}
+          <aside className="order-2 space-y-6 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-24 lg:self-start">
             {hasCoordinates && (
               <div className="overflow-hidden rounded-xl border border-border">
                 <iframe
@@ -251,7 +249,7 @@ function EventPage() {
                         href={contactUrl(contact)}
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                        className="-my-1 inline-flex items-center gap-2 py-1 text-sm font-medium text-primary hover:underline"
                       >
                         {CONTACT_LABEL[contact.type]}
                         <ExternalLink className="size-3.5" />
@@ -262,6 +260,10 @@ function EventPage() {
               </div>
             )}
           </aside>
+
+          <div className="order-3 min-w-0 lg:col-start-1 lg:row-start-2">
+            <Opinions eventId={event.id} />
+          </div>
         </div>
       </article>
 

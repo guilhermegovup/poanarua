@@ -18,24 +18,27 @@ export function SiteFooter() {
 
         <nav className="text-sm">
           <h2 className="mb-3 font-bold">Navegar</h2>
-          <ul className="space-y-2 text-muted-foreground">
+          <ul className="space-y-1 text-muted-foreground">
             <li>
-              <Link to="/" className="hover:text-foreground">
+              <Link to="/" className="-my-1 inline-block py-1 hover:text-foreground">
                 Início
               </Link>
             </li>
             <li>
-              <Link to="/busca" className="hover:text-foreground">
+              <Link to="/busca" className="-my-1 inline-block py-1 hover:text-foreground">
                 Buscar eventos
               </Link>
             </li>
             <li>
-              <Link to="/favoritos" className="hover:text-foreground">
+              <Link to="/favoritos" className="-my-1 inline-block py-1 hover:text-foreground">
                 Meus favoritos
               </Link>
             </li>
             <li>
-              <Link to="/cadastrar-evento" className="hover:text-foreground">
+              <Link
+                to="/cadastrar-evento"
+                className="-my-1 inline-block py-1 hover:text-foreground"
+              >
                 Cadastrar evento
               </Link>
             </li>
@@ -44,11 +47,11 @@ export function SiteFooter() {
 
         <nav className="text-sm">
           <h2 className="mb-3 font-bold">Contato</h2>
-          <ul className="space-y-2 text-muted-foreground">
+          <ul className="space-y-1 text-muted-foreground">
             <li>
               <a
                 href={support.whatsapp}
-                className="hover:text-foreground"
+                className="-my-1 inline-block py-1 hover:text-foreground"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -58,7 +61,7 @@ export function SiteFooter() {
             <li>
               <a
                 href={support.instagram}
-                className="hover:text-foreground"
+                className="-my-1 inline-block py-1 hover:text-foreground"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -68,7 +71,7 @@ export function SiteFooter() {
             <li>
               <a
                 href={support.facebook}
-                className="hover:text-foreground"
+                className="-my-1 inline-block py-1 hover:text-foreground"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -76,7 +79,7 @@ export function SiteFooter() {
               </a>
             </li>
             <li>
-              <a href={support.email} className="hover:text-foreground">
+              <a href={support.email} className="-my-1 inline-block py-1 hover:text-foreground">
                 {CONTACT.EMAIL}
               </a>
             </li>
@@ -85,16 +88,16 @@ export function SiteFooter() {
 
         <nav className="text-sm">
           <h2 className="mb-3 font-bold">Mais</h2>
-          <ul className="space-y-2 text-muted-foreground">
+          <ul className="space-y-1 text-muted-foreground">
             <li>
-              <Link to="/sobre" className="hover:text-foreground">
+              <Link to="/sobre" className="-my-1 inline-block py-1 hover:text-foreground">
                 Sobre o projeto
               </Link>
             </li>
             <li>
               <a
                 href={CONTACT.TERMS}
-                className="hover:text-foreground"
+                className="-my-1 inline-block py-1 hover:text-foreground"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -104,7 +107,7 @@ export function SiteFooter() {
             <li>
               <a
                 href={CONTACT.PRIVACY}
-                className="hover:text-foreground"
+                className="-my-1 inline-block py-1 hover:text-foreground"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -114,7 +117,7 @@ export function SiteFooter() {
             <li>
               <a
                 href={CONTACT.PLAY_STORE}
-                className="hover:text-foreground"
+                className="-my-1 inline-block py-1 hover:text-foreground"
                 target="_blank"
                 rel="noreferrer"
               >

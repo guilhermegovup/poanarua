@@ -4,6 +4,7 @@ import { CalendarDays, Clock, MapPin } from "lucide-react";
 import { FavoriteButton } from "@/components/event/favorite-button";
 import type { EventItem } from "@/data/types";
 import { formatHour, formatShortDate } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 /** Item de lista horizontal, usado em busca, favoritos e categorias. */
 export function EventRow({ event }: { event: EventItem }) {
@@ -12,7 +13,7 @@ export function EventRow({ event }: { event: EventItem }) {
       <Link
         to="/evento/$id"
         params={{ id: String(event.id) }}
-        className="flex gap-4 rounded-xl border border-border bg-card p-3 transition hover:border-primary/40 hover:shadow-sm"
+        className="flex gap-4 rounded-xl border border-border bg-card p-3 shadow-card transition-[box-shadow,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-primary/30 hover:shadow-lift"
       >
         <img
           src={event.image.url}
@@ -47,7 +48,13 @@ export function EventRow({ event }: { event: EventItem }) {
               {event.tags.slice(0, 3).map((tag) => (
                 <li
                   key={tag.name}
-                  className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+                    // Gratuito é a informação que mais muda a decisão de ir.
+                    tag.name === "GRATUITO"
+                      ? "bg-brand-tint-strong text-brand-wine"
+                      : "bg-secondary text-muted-foreground",
+                  )}
                 >
                   {tag.name}
                 </li>
@@ -61,7 +68,7 @@ export function EventRow({ event }: { event: EventItem }) {
         eventId={event.id}
         eventName={event.name}
         favorite={event.favorite}
-        className="absolute right-3 top-3 z-10"
+        className="absolute right-2 top-2 z-10 shadow-card"
       />
     </article>
   );
