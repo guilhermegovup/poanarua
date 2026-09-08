@@ -5,6 +5,7 @@ import type {
   Evaluation,
   EventItem,
   EventPayload,
+  EventStatus,
   Flag,
   GalleryImage,
   GoEventUser,
@@ -100,6 +101,69 @@ export const api = {
 
   myEvents: (): Promise<EventItem[]> =>
     USE_MOCK ? tick(store.myEvents()) : request<EventItem[]>("/event_by_user"),
+
+  /* --------------------------------------------------------------- webadmin */
+
+  /** Tudo, inclusive pendente e oculto. */
+  adminEvents: (): Promise<EventItem[]> =>
+    USE_MOCK ? tick(store.allEvents()) : request<EventItem[]>("/admin/events"),
+
+  setStatus: (id: number, status: EventStatus): Promise<void> => {
+    if (USE_MOCK) {
+      store.setStatus(id, status);
+      return Promise.resolve();
+    }
+    return request<void>(`/admin/event/${id}/status`, {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+    });
+  },
+
+  setStatusMany: (ids: number[], status: EventStatus): Promise<void> => {
+    if (USE_MOCK) {
+      store.setStatusMany(ids, status);
+      return Promise.resolve();
+    }
+    return request<void>("/admin/events/status", {
+      method: "PUT",
+      body: JSON.stringify({ ids, status }),
+    });
+  },
+
+  deleteMany: (ids: number[]): Promise<void> => {
+    if (USE_MOCK) {
+      store.deleteMany(ids);
+      return Promise.resolve();
+    }
+    return request<void>("/admin/events", {
+      method: "DELETE",
+      body: JSON.stringify({ ids }),
+    });
+  },
+
+  updateEvent: (id: number, payload: Partial<EventPayload> & { image?: string }): Promise<void> => {
+    if (USE_MOCK) {
+      store.updateEvent(id, payload);
+      return Promise.resolve();
+    }
+    return request<void>(`/event/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  importEvents: (events: EventItem[]): Promise<number> => {
+    if (USE_MOCK) return Promise.resolve(store.importEvents(events));
+    return request<{ imported: number }>("/admin/import", {
+      method: "POST",
+      body: JSON.stringify({ events }),
+    }).then((result) => result.imported);
+  },
+
+  knownDedupeKeys: (): Promise<Set<string>> =>
+    USE_MOCK
+      ? Promise.resolve(store.knownDedupeKeys())
+      : request<string[]>("/admin/dedupe-keys").then((keys) => new Set(keys)),
 
   createEvent: (payload: EventPayload & { image?: string }): Promise<EventItem> => {
     if (USE_MOCK) return Promise.resolve(store.createEvent(payload));

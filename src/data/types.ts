@@ -9,6 +9,28 @@ export type ContactType = "site" | "facebook" | "instagram" | "whatsapp";
 /** 'TOP' abre o carrossel da home, 'END' é o banner do rodapé. */
 export type BannerSlot = "TOP" | "CENTER" | "END" | "NORMAL";
 
+/**
+ * Ciclo de vida de um evento na plataforma.
+ *
+ * O que o coletor traz de fora entra como `pending` e só aparece no site depois
+ * de aprovado no webadmin. Nada publica sozinho.
+ */
+export type EventStatus = "pending" | "published" | "hidden" | "rejected";
+
+/** De onde o evento veio. */
+export interface EventSource {
+  /** Identificador da fonte, ex: "destino-poa", "manual". */
+  id: string;
+  /** Nome legível, exibido como crédito. */
+  name: string;
+  /** Página original do evento, para atribuição e reconferência. */
+  url?: string;
+  /** Id do evento no sistema de origem, quando existe. */
+  external_id?: string;
+  /** Quando o coletor trouxe este registro (ISO). */
+  imported_at?: string;
+}
+
 export interface UploadedFile {
   id?: number;
   url: string;
@@ -108,6 +130,16 @@ export interface EventItem {
   locations: EventLocation[];
   user_id?: number;
   favorite?: boolean;
+
+  /** Ausente em dados legados; tratamos como 'published'. */
+  status?: EventStatus;
+  /** Ausente quando o evento foi cadastrado à mão no webadmin. */
+  source?: EventSource;
+  /**
+   * Chave de deduplicação: normaliza nome + data + endereço para reconhecer
+   * o mesmo evento vindo de fontes diferentes.
+   */
+  dedupe_key?: string;
 }
 
 export interface EventFavorite {

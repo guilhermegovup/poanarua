@@ -13,10 +13,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BuscaRouteImport } from './routes/busca'
 import { Route as CadastrarEventoRouteImport } from './routes/cadastrar-evento'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as OfflineRouteImport } from './routes/offline'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminImportarRouteImport } from './routes/admin/importar'
 import { Route as CategoriaIdRouteImport } from './routes/categoria.$id'
 import { Route as EventoIdRouteImport } from './routes/evento.$id'
+import { Route as AdminEventoIdRouteImport } from './routes/admin/evento/$id'
+import { Route as AdminEventoNovoRouteImport } from './routes/admin/evento/novo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -38,6 +43,11 @@ const FavoritosRoute = FavoritosRouteImport.update({
   path: '/favoritos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfflineRoute = OfflineRouteImport.update({
+  id: '/offline',
+  path: '/offline',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
@@ -46,6 +56,16 @@ const PerfilRoute = PerfilRouteImport.update({
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
   path: '/sobre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminImportarRoute = AdminImportarRouteImport.update({
+  id: '/admin/importar',
+  path: '/admin/importar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriaIdRoute = CategoriaIdRouteImport.update({
@@ -58,26 +78,46 @@ const EventoIdRoute = EventoIdRouteImport.update({
   path: '/evento/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEventoIdRoute = AdminEventoIdRouteImport.update({
+  id: '/admin/evento/$id',
+  path: '/admin/evento/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEventoNovoRoute = AdminEventoNovoRouteImport.update({
+  id: '/admin/evento/novo',
+  path: '/admin/evento/novo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/busca': typeof BuscaRoute
   '/cadastrar-evento': typeof CadastrarEventoRoute
   '/favoritos': typeof FavoritosRoute
+  '/offline': typeof OfflineRoute
   '/perfil': typeof PerfilRoute
   '/sobre': typeof SobreRoute
+  '/admin/importar': typeof AdminImportarRoute
   '/categoria/$id': typeof CategoriaIdRoute
   '/evento/$id': typeof EventoIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/evento/$id': typeof AdminEventoIdRoute
+  '/admin/evento/novo': typeof AdminEventoNovoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/busca': typeof BuscaRoute
   '/cadastrar-evento': typeof CadastrarEventoRoute
   '/favoritos': typeof FavoritosRoute
+  '/offline': typeof OfflineRoute
   '/perfil': typeof PerfilRoute
   '/sobre': typeof SobreRoute
+  '/admin/importar': typeof AdminImportarRoute
   '/categoria/$id': typeof CategoriaIdRoute
   '/evento/$id': typeof EventoIdRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/evento/$id': typeof AdminEventoIdRoute
+  '/admin/evento/novo': typeof AdminEventoNovoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,10 +125,15 @@ export interface FileRoutesById {
   '/busca': typeof BuscaRoute
   '/cadastrar-evento': typeof CadastrarEventoRoute
   '/favoritos': typeof FavoritosRoute
+  '/offline': typeof OfflineRoute
   '/perfil': typeof PerfilRoute
   '/sobre': typeof SobreRoute
+  '/admin/importar': typeof AdminImportarRoute
   '/categoria/$id': typeof CategoriaIdRoute
   '/evento/$id': typeof EventoIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/evento/$id': typeof AdminEventoIdRoute
+  '/admin/evento/novo': typeof AdminEventoNovoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,30 +142,45 @@ export interface FileRouteTypes {
     | '/busca'
     | '/cadastrar-evento'
     | '/favoritos'
+    | '/offline'
     | '/perfil'
     | '/sobre'
+    | '/admin/importar'
     | '/categoria/$id'
     | '/evento/$id'
+    | '/admin/'
+    | '/admin/evento/$id'
+    | '/admin/evento/novo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/busca'
     | '/cadastrar-evento'
     | '/favoritos'
+    | '/offline'
     | '/perfil'
     | '/sobre'
+    | '/admin/importar'
     | '/categoria/$id'
     | '/evento/$id'
+    | '/admin'
+    | '/admin/evento/$id'
+    | '/admin/evento/novo'
   id:
     | '__root__'
     | '/'
     | '/busca'
     | '/cadastrar-evento'
     | '/favoritos'
+    | '/offline'
     | '/perfil'
     | '/sobre'
+    | '/admin/importar'
     | '/categoria/$id'
     | '/evento/$id'
+    | '/admin/'
+    | '/admin/evento/$id'
+    | '/admin/evento/novo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -128,10 +188,15 @@ export interface RootRouteChildren {
   BuscaRoute: typeof BuscaRoute
   CadastrarEventoRoute: typeof CadastrarEventoRoute
   FavoritosRoute: typeof FavoritosRoute
+  OfflineRoute: typeof OfflineRoute
   PerfilRoute: typeof PerfilRoute
   SobreRoute: typeof SobreRoute
+  AdminImportarRoute: typeof AdminImportarRoute
   CategoriaIdRoute: typeof CategoriaIdRoute
   EventoIdRoute: typeof EventoIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminEventoIdRoute: typeof AdminEventoIdRoute
+  AdminEventoNovoRoute: typeof AdminEventoNovoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -164,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/offline': {
+      id: '/offline'
+      path: '/offline'
+      fullPath: '/offline'
+      preLoaderRoute: typeof OfflineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/perfil': {
       id: '/perfil'
       path: '/perfil'
@@ -176,6 +248,20 @@ declare module '@tanstack/react-router' {
       path: '/sobre'
       fullPath: '/sobre'
       preLoaderRoute: typeof SobreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/importar': {
+      id: '/admin/importar'
+      path: '/admin/importar'
+      fullPath: '/admin/importar'
+      preLoaderRoute: typeof AdminImportarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categoria/$id': {
@@ -192,6 +278,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/evento/$id': {
+      id: '/admin/evento/$id'
+      path: '/admin/evento/$id'
+      fullPath: '/admin/evento/$id'
+      preLoaderRoute: typeof AdminEventoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/evento/novo': {
+      id: '/admin/evento/novo'
+      path: '/admin/evento/novo'
+      fullPath: '/admin/evento/novo'
+      preLoaderRoute: typeof AdminEventoNovoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -200,10 +300,15 @@ const rootRouteChildren: RootRouteChildren = {
   BuscaRoute: BuscaRoute,
   CadastrarEventoRoute: CadastrarEventoRoute,
   FavoritosRoute: FavoritosRoute,
+  OfflineRoute: OfflineRoute,
   PerfilRoute: PerfilRoute,
   SobreRoute: SobreRoute,
+  AdminImportarRoute: AdminImportarRoute,
   CategoriaIdRoute: CategoriaIdRoute,
   EventoIdRoute: EventoIdRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminEventoIdRoute: AdminEventoIdRoute,
+  AdminEventoNovoRoute: AdminEventoNovoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
