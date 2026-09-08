@@ -24,3 +24,13 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## App mobile
+
+O aplicativo nativo do Poa na Rua — recriado a partir do APK 2.7.1 publicado na
+Play Store — vive em [`mobile/`](mobile/), em Expo + React Native + TypeScript,
+com ciclo de vida próprio (`cd mobile && npm install && npm start`).
+
+Ele não interfere neste projeto web: a raiz continua sendo o projeto do Lovable.
+Veja [`mobile/README.md`](mobile/README.md) e
+[`mobile/docs/RECRIACAO.md`](mobile/docs/RECRIACAO.md).
