@@ -194,7 +194,7 @@ const seeds: Seed[] = [
   },
   {
     id: 107,
-    name: '食 Food Trucks no Parcão',
+    name: 'Food Trucks no Parcão',
     description:
       '<p>Encontro de food trucks no Parque Moinhos de Vento com opções veganas, hambúrguer artesanal e sobremesas.</p>',
     address: 'Parque Moinhos de Vento - Moinhos de Vento, Porto Alegre',
