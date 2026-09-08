@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdmRouteImport } from './routes/adm'
 import { Route as BuscaRouteImport } from './routes/busca'
 import { Route as CadastrarEventoRouteImport } from './routes/cadastrar-evento'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
@@ -26,6 +27,11 @@ import { Route as AdminEventoNovoRouteImport } from './routes/admin/evento/novo'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmRoute = AdmRouteImport.update({
+  id: '/adm',
+  path: '/adm',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BuscaRoute = BuscaRouteImport.update({
@@ -91,6 +97,7 @@ const AdminEventoNovoRoute = AdminEventoNovoRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/adm': typeof AdmRoute
   '/busca': typeof BuscaRoute
   '/cadastrar-evento': typeof CadastrarEventoRoute
   '/favoritos': typeof FavoritosRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/adm': typeof AdmRoute
   '/busca': typeof BuscaRoute
   '/cadastrar-evento': typeof CadastrarEventoRoute
   '/favoritos': typeof FavoritosRoute
@@ -122,6 +130,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/adm': typeof AdmRoute
   '/busca': typeof BuscaRoute
   '/cadastrar-evento': typeof CadastrarEventoRoute
   '/favoritos': typeof FavoritosRoute
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/adm'
     | '/busca'
     | '/cadastrar-evento'
     | '/favoritos'
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/adm'
     | '/busca'
     | '/cadastrar-evento'
     | '/favoritos'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/adm'
     | '/busca'
     | '/cadastrar-evento'
     | '/favoritos'
@@ -185,6 +197,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdmRoute: typeof AdmRoute
   BuscaRoute: typeof BuscaRoute
   CadastrarEventoRoute: typeof CadastrarEventoRoute
   FavoritosRoute: typeof FavoritosRoute
@@ -206,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/adm': {
+      id: '/adm'
+      path: '/adm'
+      fullPath: '/adm'
+      preLoaderRoute: typeof AdmRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/busca': {
@@ -297,6 +317,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdmRoute: AdmRoute,
   BuscaRoute: BuscaRoute,
   CadastrarEventoRoute: CadastrarEventoRoute,
   FavoritosRoute: FavoritosRoute,

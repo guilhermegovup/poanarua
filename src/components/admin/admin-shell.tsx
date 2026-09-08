@@ -1,11 +1,12 @@
-import type { ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState, type ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ArrowUpRight, CalendarPlus, DownloadCloud, LayoutList, ShieldAlert } from "lucide-react";
 
 import { Brand } from "@/components/layout/brand";
 import { Button } from "@/components/ui/button";
 import { isRemote } from "@/data/supabase";
 import { useAuth } from "@/hooks/use-auth";
+import { isAdmUnlocked, lockAdm } from "@/lib/admin-gate";
 import { cn } from "@/lib/utils";
 
 const LINKS: {
@@ -29,6 +30,22 @@ const LINKS: {
 export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const { isAdmin, loading } = useAuth();
+  const navigate = useNavigate();
+  const [unlocked, setUnlocked] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const ok = isAdmUnlocked();
+    setUnlocked(ok);
+    if (!ok) navigate({ to: "/adm", replace: true });
+  }, [navigate]);
+
+  if (unlocked !== true) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-secondary/30">
+        <div className="h-8 w-40 animate-pulse rounded bg-secondary" />
+      </div>
+    );
+  }
 
   if (isRemote && loading) {
     return (
@@ -80,6 +97,17 @@ export function AdminShell({ children }: { children: ReactNode }) {
             Ver o site
             <ArrowUpRight className="size-4" />
           </Link>
+
+          <button
+            type="button"
+            onClick={() => {
+              lockAdm();
+              navigate({ to: "/adm", replace: true });
+            }}
+            className="shrink-0 text-sm text-muted-foreground hover:text-foreground"
+          >
+            Sair
+          </button>
         </div>
       </header>
 
