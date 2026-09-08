@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import logoAsset from "@/assets/logo-poa-na-rua.svg.asset.json";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -16,7 +18,12 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="flex min-h-screen items-center justify-center px-6">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 px-6">
+      <img
+        src={logoAsset.url}
+        alt="Logo poa na rua"
+        className="h-40 w-40 md:h-56 md:w-56"
+      />
       <h1 className="text-4xl font-medium tracking-tight text-foreground">
         poa na rua
       </h1>
