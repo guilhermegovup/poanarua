@@ -1,37 +1,29 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+import { supabase as lovableClient } from "@/integrations/supabase/client";
 
 /**
- * Cliente do Supabase (Lovable Cloud).
+ * Ponte para o cliente do Lovable Cloud.
  *
- * As variáveis são injetadas pelo Lovable quando o Cloud está ligado. Os nomes
- * mudaram de `ANON_KEY` para `PUBLISHABLE_KEY` em algum momento, então aceitamos
- * os dois. Sem elas o site continua rodando no store local — assim o preview
- * nunca quebra por falta de configuração.
+ * `src/integrations/supabase/client.ts` é gerado pelo Lovable e cuida do
+ * storage de sessão do preview, das chaves de API novas e do SSR. Criar um
+ * segundo cliente aqui daria duas sessões de auth concorrendo, então este
+ * módulo só decide *se* há banco e devolve o cliente deles.
  */
 
 const env = import.meta.env as Record<string, string | undefined>;
 
-const url = env["VITE_SUPABASE_URL"];
-const key = env["VITE_SUPABASE_PUBLISHABLE_KEY"] ?? env["VITE_SUPABASE_ANON_KEY"];
-
-export const isRemote = Boolean(url && key);
+/** O cliente do Lovable lança se as variáveis faltarem — por isso checamos antes. */
+export const isRemote = Boolean(env["VITE_SUPABASE_URL"] && env["VITE_SUPABASE_PUBLISHABLE_KEY"]);
 
 export const supabase: SupabaseClient | null = isRemote
-  ? createClient(url!, key!, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-      },
-    })
+  ? (lovableClient as unknown as SupabaseClient)
   : null;
 
 /** Uso interno: só chame depois de checar `isRemote`. */
 export function requireSupabase(): SupabaseClient {
-  if (!supabase) {
-    throw new Error(
-      "Supabase não configurado. Defina VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY.",
-    );
+  if (!isRemote) {
+    throw new Error("Supabase não configurado. Ligue o Lovable Cloud para o site usar o banco.");
   }
-  return supabase;
+  return lovableClient as unknown as SupabaseClient;
 }
