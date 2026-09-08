@@ -14,16 +14,317 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admins: {
+        Row: {
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          created_at: string
+          id: number
+          image_url: string | null
+          name: string
+          order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          name: string
+          order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          name?: string
+          order?: number
+        }
+        Relationships: []
+      }
+      event_attendances: {
+        Row: {
+          event_id: number
+          user_id: string
+        }
+        Insert: {
+          event_id: number
+          user_id: string
+        }
+        Update: {
+          event_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_attendances_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_categories: {
+        Row: {
+          category_id: number
+          event_id: number
+        }
+        Insert: {
+          category_id: number
+          event_id: number
+        }
+        Update: {
+          category_id?: number
+          event_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_categories_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_categories_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_contacts: {
+        Row: {
+          event_id: number
+          id: number
+          type: string
+          value: string
+        }
+        Insert: {
+          event_id: number
+          id?: number
+          type: string
+          value: string
+        }
+        Update: {
+          event_id?: number
+          id?: number
+          type?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_contacts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_evaluations: {
+        Row: {
+          comment: string
+          created_at: string
+          event_id: number
+          id: number
+          note: number
+          user_id: string
+        }
+        Insert: {
+          comment?: string
+          created_at?: string
+          event_id: number
+          id?: number
+          note: number
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          event_id?: number
+          id?: number
+          note?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_evaluations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_favorites: {
+        Row: {
+          event_id: number
+          user_id: string
+        }
+        Insert: {
+          event_id: number
+          user_id: string
+        }
+        Update: {
+          event_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_favorites_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_tags: {
+        Row: {
+          event_id: number
+          tag_id: number
+        }
+        Insert: {
+          event_id: number
+          tag_id: number
+        }
+        Update: {
+          event_id?: number
+          tag_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_tags_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          address: string
+          banner: string | null
+          created_at: string
+          created_by: string | null
+          dedupe_key: string | null
+          description: string
+          ends_at: string | null
+          external_id: string | null
+          featured: boolean
+          hour: string
+          id: number
+          image_url: string | null
+          imported_at: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          prioritized: boolean
+          source_id: string | null
+          source_name: string | null
+          source_url: string | null
+          starts_at: string
+          status: Database["public"]["Enums"]["event_status"]
+          updated_at: string
+        }
+        Insert: {
+          address?: string
+          banner?: string | null
+          created_at?: string
+          created_by?: string | null
+          dedupe_key?: string | null
+          description?: string
+          ends_at?: string | null
+          external_id?: string | null
+          featured?: boolean
+          hour?: string
+          id?: number
+          image_url?: string | null
+          imported_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          prioritized?: boolean
+          source_id?: string | null
+          source_name?: string | null
+          source_url?: string | null
+          starts_at: string
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          banner?: string | null
+          created_at?: string
+          created_by?: string | null
+          dedupe_key?: string | null
+          description?: string
+          ends_at?: string | null
+          external_id?: string | null
+          featured?: boolean
+          hour?: string
+          id?: number
+          image_url?: string | null
+          imported_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          prioritized?: boolean
+          source_id?: string | null
+          source_name?: string | null
+          source_url?: string | null
+          starts_at?: string
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      event_status: "pending" | "published" | "hidden" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +451,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      event_status: ["pending", "published", "hidden", "rejected"],
+    },
   },
 } as const
