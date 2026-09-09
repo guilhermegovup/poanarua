@@ -1,0 +1,17 @@
+<svg viewBox="0 0 480 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"
+     width="480" height="320" role="img" aria-label="Cortina de teatro e pincelada">
+
+  <rect width="480" height="320" fill="#df2a58"/>
+
+  <path d="M240 58 L322 202 L158 202 Z" fill="#fff8ec" opacity="0.4"/>
+  <ellipse cx="240" cy="202" rx="82" ry="17" fill="#fff8ec"/>
+  <rect x="96" y="200" width="288" height="10" rx="5" fill="#fdb211"/>
+
+  <path d="M0 0 H150 q -34 78 -12 152 q -26 84 -4 168 H0 Z" fill="#b32f4c"/>
+  <path d="M480 0 H330 q 34 78 12 152 q 26 84 4 168 H480 Z" fill="#b32f4c"/>
+
+  <path d="M0 0 H480 V54 a30,24 0 0 1 -60,0 a30,24 0 0 1 -60,0 a30,24 0 0 1 -60,0 a30,24 0 0 1 -60,0 a30,24 0 0 1 -60,0 a30,24 0 0 1 -60,0 a30,24 0 0 1 -60,0 a30,24 0 0 1 -60,0 Z" fill="#8f2540"/>
+
+  <path d="M118 150 q 34 22 34 54 q -34 -8 -46 -32 Z" fill="#fdb211"/>
+  <path d="M362 150 q -34 22 -34 54 q 34 -8 46 -32 Z" fill="#fdb211"/>
+  </svg>

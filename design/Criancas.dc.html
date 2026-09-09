@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    a { color: #b32f4c; }
+    a:hover { color: #8f2540; }
+  </style>
+</helmet>
+<div style="width: 100%; height: 100%; overflow: hidden; background: #ffcd3d;">
+  <svg viewBox="0 0 480 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"
+       style="display: block; width: 100%; height: 100%;" role="img" aria-label="Cata-vento e balões">
+
+    <rect width="480" height="320" fill="#ffcd3d"/>
+    <circle cx="58" cy="252" r="9" fill="#f37422"/>
+    <circle cx="128" cy="288" r="6" fill="#b32f4c"/>
+    <circle cx="446" cy="256" r="10" fill="#df2a58"/>
+    <rect x="196" y="262" width="16" height="16" rx="4" fill="#fff8ec" transform="rotate(24 204 270)"/>
+    <rect x="392" y="196" width="13" height="13" rx="3" fill="#b32f4c" transform="rotate(-18 398 202)"/>
+
+    <path d="M112 176 q 20 40 -6 72 q -24 30 2 62" stroke="#0d0d0d" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M206 152 q 14 44 -10 74 q -20 26 0 56" stroke="#0d0d0d" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+    <ellipse cx="112" cy="108" rx="56" ry="66" fill="#df2a58"/>
+    <path d="M112 172 l-11 16 h22 z" fill="#df2a58"/>
+    <ellipse cx="92" cy="86" rx="14" ry="20" fill="#fff8ec" opacity="0.55"/>
+
+    <ellipse cx="206" cy="88" rx="42" ry="50" fill="#f37422"/>
+    <path d="M206 136 l-9 13 h18 z" fill="#f37422"/>
+    <ellipse cx="192" cy="72" rx="10" ry="14" fill="#fff8ec" opacity="0.5"/>
+
+    <rect x="345" y="128" width="11" height="180" rx="6" fill="#0d0d0d"/>
+    <g transform="translate(350,128)">
+      <path d="M0 0 L80 -20 Q86 -64 40 -80 Z" fill="#df2a58"/>
+      <path d="M0 0 L80 -20 Q86 -64 40 -80 Z" fill="#b32f4c" transform="rotate(90)"/>
+      <path d="M0 0 L80 -20 Q86 -64 40 -80 Z" fill="#f37422" transform="rotate(180)"/>
+      <path d="M0 0 L80 -20 Q86 -64 40 -80 Z" fill="#fff8ec" transform="rotate(270)"/>
+      <circle r="13" fill="#0d0d0d"/>
+    </g>
+  </svg>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview": {"width": 480, "height": 320}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

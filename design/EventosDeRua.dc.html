@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    a { color: #b32f4c; }
+    a:hover { color: #8f2540; }
+  </style>
+</helmet>
+<div style="width: 100%; height: 100%; overflow: hidden; background: #df2a58;">
+  <svg viewBox="0 0 480 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"
+       style="display: block; width: 100%; height: 100%;" role="img" aria-label="Bandeirinhas de rua e confete">
+
+    <rect width="480" height="320" fill="#df2a58"/>
+
+    <path d="M28 135 Q 240 205, 452 135" stroke="#8f2540" stroke-width="4" fill="none"/>
+    <path d="M61 148 L95 148 L78 196 Z" fill="#8f2540"/>
+    <path d="M136 161 L170 161 L153 209 Z" fill="#8f2540"/>
+    <path d="M211 169 L245 169 L228 217 Z" fill="#8f2540"/>
+    <path d="M286 170 L320 170 L303 218 Z" fill="#8f2540"/>
+    <path d="M361 164 L395 164 L378 212 Z" fill="#8f2540"/>
+
+    <path d="M-10 40 Q 240 110, 490 40" stroke="#0d0d0d" stroke-width="5" fill="none"/>
+    <path d="M23 53 L57 53 L40 101 Z" fill="#fdb211"/>
+    <path d="M98 66 L132 66 L115 114 Z" fill="#fff8ec"/>
+    <path d="M173 74 L207 74 L190 122 Z" fill="#ffcd3d"/>
+    <path d="M248 75 L282 75 L265 123 Z" fill="#f37422"/>
+    <path d="M323 69 L357 69 L340 117 Z" fill="#fff8ec"/>
+    <path d="M398 58 L432 58 L415 106 Z" fill="#fdb211"/>
+
+    <rect x="66" y="238" width="15" height="15" rx="4" fill="#fdb211" transform="rotate(28 73 245)"/>
+    <rect x="336" y="252" width="13" height="13" rx="3" fill="#fff8ec" transform="rotate(-22 342 258)"/>
+    <circle cx="196" cy="248" r="8" fill="#ffcd3d"/>
+    <circle cx="432" cy="228" r="7" fill="#fdb211"/>
+    <rect x="252" y="284" width="14" height="14" rx="4" fill="#f37422" transform="rotate(14 259 291)"/>
+  </svg>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview": {"width": 480, "height": 320}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

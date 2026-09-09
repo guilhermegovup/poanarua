@@ -12,4 +12,16 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    define: {
+      /*
+       * Identificador do build, usado para registrar `/sw.js?v=<id>`.
+       *
+       * O navegador compara a URL do service worker para decidir se existe
+       * versão nova, e o próprio worker usa esse valor para nomear os caches.
+       * Sem ele, os caches de todos os deploys se acumulavam num nome só.
+       */
+      __BUILD_ID__: JSON.stringify(Date.now().toString(36)),
+    },
+  },
 });

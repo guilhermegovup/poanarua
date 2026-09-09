@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { CalendarPlus, CalendarX, PartyPopper, WifiOff } from "lucide-react";
 
 import { EventCard, EventCardSkeleton } from "@/components/event/event-card";
@@ -18,11 +18,26 @@ import {
   applyQuickFilters,
   countByFilter,
   findQuickFilter,
+  parseQuickFilters,
   type QuickFilterId,
 } from "@/lib/filters";
 import { byDate, isHappeningToday, isUpcoming } from "@/lib/format";
 
 export const Route = createFileRoute("/")({
+  /*
+   * Os recortes moram na URL: `/?filtro=hoje,gratis`.
+   *
+   * Assim os atalhos do manifest levam a algum lugar — antes todos apontavam
+   * para "/" e abriam exatamente o mesmo que abrir o app — e dá para mandar no
+   * grupo "olha o que tem de graça esse fim de semana" em vez de só o link do
+   * site. Voltar no navegador também desfaz o filtro, como se espera.
+   */
+  validateSearch: (search: Record<string, unknown>): { filtro?: string } => {
+    // Texto separado por vírgula, não array: o roteador serializaria um array
+    // como `?filtro=["hoje","amanha"]`, que ninguém manda no grupo do WhatsApp.
+    const filtro = parseQuickFilters(search["filtro"]).join(",");
+    return filtro ? { filtro } : {};
+  },
   head: () => ({
     meta: [
       { title: `${SITE.name} — ${SITE.tagline}` },
@@ -41,7 +56,9 @@ function Home() {
   const { data: categories = [], isLoading: loadingCategories } = useCategories();
   const user = useUser();
 
-  const [active, setActive] = useState<QuickFilterId[]>([]);
+  const { filtro } = Route.useSearch();
+  const navigate = useNavigate({ from: "/" });
+  const active = useMemo(() => parseQuickFilters(filtro), [filtro]);
 
   const counts = useMemo(() => countByFilter(events), [events]);
   const filtered = useMemo(() => applyQuickFilters(events, active).sort(byDate), [events, active]);
@@ -57,9 +74,15 @@ function Home() {
   const filtering = active.length > 0;
 
   function toggle(id: QuickFilterId) {
-    setActive((current) =>
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
-    );
+    const next = active.includes(id) ? active.filter((item) => item !== id) : [...active, id];
+
+    navigate({
+      search: next.length ? { filtro: next.join(",") } : {},
+      // Marcar e desmarcar recorte não é navegação: encheria o histórico e
+      // faria o botão "voltar" percorrer cada toque.
+      replace: true,
+      resetScroll: false,
+    });
   }
 
   if (isError) {

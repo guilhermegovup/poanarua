@@ -1,0 +1,27 @@
+<svg viewBox="0 0 480 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"
+     width="480" height="320" role="img" aria-label="Toldo de feira e produtos da horta">
+
+  <rect width="480" height="320" fill="#fdb211"/>
+
+  <defs><clipPath id="toldo"><path d="M0 0 H480 V80 a30,26 0 0 1 -60,0 a30,26 0 0 1 -60,0 a30,26 0 0 1 -60,0 a30,26 0 0 1 -60,0 a30,26 0 0 1 -60,0 a30,26 0 0 1 -60,0 a30,26 0 0 1 -60,0 a30,26 0 0 1 -60,0 Z"/></clipPath></defs>
+  <g clip-path="url(#toldo)">
+    <rect x="0" y="0" width="480" height="112" fill="#fff8ec"/>
+    <rect x="60" y="0" width="60" height="112" fill="#b32f4c"/>
+    <rect x="180" y="0" width="60" height="112" fill="#b32f4c"/>
+    <rect x="300" y="0" width="60" height="112" fill="#b32f4c"/>
+    <rect x="420" y="0" width="60" height="112" fill="#b32f4c"/>
+  </g>
+
+  <path d="M92 148 q 34 -30 66 -6 q -34 28 -66 6 Z" fill="#8f2540"/>
+  <circle cx="112" cy="196" r="50" fill="#f37422"/>
+  <path d="M112 146 q -8 -20 6 -32 q 10 16 2 32 Z" fill="#8f2540"/>
+
+  <circle cx="222" cy="182" r="38" fill="#df2a58"/>
+  <path d="M222 144 q -14 -18 -2 -30 q 14 14 2 30 Z" fill="#8f2540"/>
+
+  <circle cx="300" cy="206" r="28" fill="#fff8ec"/>
+
+  <path d="M372 154 L410 154 L392 236 Z" fill="#f37422"/>
+  <path d="M382 154 q -18 -26 -2 -40 q 12 18 8 40 Z" fill="#8f2540"/>
+  <path d="M400 154 q 20 -22 34 -12 q -12 18 -34 12 Z" fill="#8f2540"/>
+  </svg>

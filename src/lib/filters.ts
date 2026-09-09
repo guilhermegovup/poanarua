@@ -123,3 +123,25 @@ export function countByFilter(
   }
   return counts;
 }
+
+function isQuickFilterId(value: string): value is QuickFilterId {
+  return QUICK_FILTERS.some((filter) => filter.id === value);
+}
+
+/**
+ * Lê `?filtro=hoje,gratis` da URL.
+ *
+ * Descarta o que não reconhece em vez de reclamar: um link antigo com um
+ * recorte que não existe mais deve abrir a home, não uma tela de erro.
+ */
+export function parseQuickFilters(value: unknown): QuickFilterId[] {
+  const parts =
+    typeof value === "string" ? value.split(",") : Array.isArray(value) ? value.map(String) : [];
+
+  const seen = new Set<QuickFilterId>();
+  for (const part of parts) {
+    const id = part.trim();
+    if (isQuickFilterId(id)) seen.add(id);
+  }
+  return [...seen];
+}
