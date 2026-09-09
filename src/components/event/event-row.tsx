@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 
+import { EventImage } from "@/components/event/event-image";
 import { FavoriteButton } from "@/components/event/favorite-button";
 import type { EventItem } from "@/data/types";
 import { formatHour, formatShortDate } from "@/lib/format";
@@ -15,11 +16,10 @@ export function EventRow({ event }: { event: EventItem }) {
         params={{ id: String(event.id) }}
         className="flex gap-4 rounded-xl border border-border bg-card p-3 shadow-card transition-[box-shadow,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-primary/30 hover:shadow-lift"
       >
-        <img
+        <EventImage
           src={event.image.url}
-          alt=""
-          loading="lazy"
-          className="size-24 shrink-0 rounded-lg object-cover sm:size-28"
+          name={event.name}
+          className="size-24 shrink-0 rounded-lg sm:size-28"
         />
 
         <div className="flex min-w-0 flex-1 flex-col gap-1.5 pr-10">

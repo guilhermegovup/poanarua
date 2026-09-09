@@ -115,8 +115,10 @@ describe("toEvent com linha mínima", () => {
     expect(event.locations).toEqual([]);
   });
 
-  it("sem imagem, gera uma capa provisória", () => {
-    expect(event.image.url).toContain("evento-12");
+  it("sem imagem, fica sem imagem", () => {
+    // Capa provisória de banco de imagens parecia foto errada, não foto
+    // faltando — e ninguém corrige o que aparenta estar pronto.
+    expect(event.image.url).toBe("");
   });
 
   it("evento cadastrado à mão não tem procedência", () => {
