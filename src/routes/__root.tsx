@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+import { persistCache, restoreCache } from "@/lib/offline-cache";
 import { registerServiceWorker } from "@/lib/pwa";
 
 import appCss from "../styles.css?url";
@@ -125,8 +127,28 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
-    registerServiceWorker();
+    registerServiceWorker((apply) => {
+      // O aviso é um convite, não uma interrupção: quem está lendo um evento
+      // não deve ter a página recarregada por baixo.
+      toast("Tem uma versão nova do Poa na Rua", {
+        duration: Infinity,
+        action: { label: "Atualizar", onClick: apply },
+      });
+    });
   }, []);
+
+  useEffect(() => {
+    // Devolve a última programação vista antes de qualquer consulta sair, para
+    // quem abriu sem rede ver conteúdo em vez de esqueleto. O que voltou é
+    // tratado como dado velho: aparece na hora e revalida contra a rede.
+    let stop: (() => void) | undefined;
+
+    restoreCache(queryClient).finally(() => {
+      stop = persistCache(queryClient);
+    });
+
+    return () => stop?.();
+  }, [queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>

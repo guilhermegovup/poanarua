@@ -13,7 +13,17 @@
  * O admin e qualquer coisa fora do GET nunca são cacheados.
  */
 
-const VERSION = "v1";
+/*
+ * A versão vem da própria URL de registro: a página registra
+ * `/sw.js?v=<id do build>`.
+ *
+ * Estava fixa em "v1". Como a limpeza do `activate` só apaga cache de nome
+ * diferente e o nome nunca mudava, cada deploy empilhava mais JS com hash novo
+ * no mesmo cache e nada saía — em um ano, lixo acumulado no aparelho de quem
+ * instalou. E, como o navegador compara a URL do worker para decidir se há
+ * versão nova, o mesmo parâmetro resolve as duas coisas de uma vez.
+ */
+const VERSION = new URL(self.location.href).searchParams.get("v") ?? "dev";
 const SHELL_CACHE = `poanarua-shell-${VERSION}`;
 const ASSET_CACHE = `poanarua-assets-${VERSION}`;
 const IMAGE_CACHE = `poanarua-images-${VERSION}`;
