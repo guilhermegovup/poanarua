@@ -1,0 +1,93 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1120,
+      "h": 480
+    },
+    {
+      "file": "Criancas.dc.html",
+      "x": 0,
+      "y": 620,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "FeirasOrganicas.dc.html",
+      "x": 580,
+      "y": 620,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "Artesanato.dc.html",
+      "x": 1160,
+      "y": 620,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "EventosDeRua.dc.html",
+      "x": 0,
+      "y": 1080,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "Musica.dc.html",
+      "x": 580,
+      "y": 1080,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "Gastronomia.dc.html",
+      "x": 1160,
+      "y": 1080,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "PontosTuristicos.dc.html",
+      "x": 0,
+      "y": 1540,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "ParquesEPracas.dc.html",
+      "x": 580,
+      "y": 1540,
+      "w": 480,
+      "h": 320
+    },
+    {
+      "file": "ArteCultura.dc.html",
+      "x": 1160,
+      "y": 1540,
+      "w": 480,
+      "h": 320
+    }
+  ],
+  "annotations": [
+    {
+      "id": "nota-trilho",
+      "x": 1240,
+      "y": 40,
+      "w": 300,
+      "text": "O trilho no tamanho real: 192x128, com o mesmo degradê e rótulo do componente.\n\nÉ assim que a pessoa vê — o desenho tem de funcionar aqui, não a 480px."
+    },
+    {
+      "id": "nota-capas",
+      "x": 1240,
+      "y": 660,
+      "w": 300,
+      "text": "As nove capas em 480x320 (3:2, o mesmo do card).\n\nExporta cada uma em PNG e sobe como capa da categoria no webadmin.\n\nO assunto fica na metade de cima: a de baixo some sob o degradê e o nome."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

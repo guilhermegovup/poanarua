@@ -35,21 +35,29 @@ const br = (isoDate: string) => {
   return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}`;
 };
 
+/**
+ * As capas são desenho nosso, em `public/categorias/`, não foto de banco de
+ * imagens: cada uma na paleta da marca e composta para o assunto ficar na
+ * metade de cima, que é a que sobra depois do degradê e do nome no card.
+ *
+ * SVG e não PNG — cada capa tem cerca de 1 KB e não perde nitidez em tela
+ * nenhuma.
+ */
 export const categories: Category[] = [
-  { id: 47, name: "PARA CRIANÇAS", order: 1, seed: "poa-criancas" },
-  { id: 22, name: "FEIRAS ORGÂNICAS E ECOLÓGICAS", order: 2, seed: "poa-feira-organica" },
-  { id: 45, name: "ARTESANATO E BRECHÓ", order: 3, seed: "poa-artesanato" },
-  { id: 40, name: "EVENTOS DE RUA", order: 4, seed: "poa-evento-rua" },
-  { id: 41, name: "MÚSICA E SHOWS", order: 5, seed: "poa-musica" },
-  { id: 42, name: "GASTRONOMIA", order: 6, seed: "poa-gastronomia" },
-  { id: 46, name: "PONTOS TURÍSTICOS", order: 7, seed: "poa-turismo" },
-  { id: 43, name: "PARQUES E PRAÇAS", order: 8, seed: "poa-parques" },
-  { id: 44, name: "ARTE E CULTURA", order: 9, seed: "poa-arte" },
-].map(({ seed: imageSeed, ...category }) => ({
+  { id: 47, name: "PARA CRIANÇAS", order: 1, cover: "criancas" },
+  { id: 22, name: "FEIRAS ORGÂNICAS E ECOLÓGICAS", order: 2, cover: "feiras-organicas" },
+  { id: 45, name: "ARTESANATO E BRECHÓ", order: 3, cover: "artesanato" },
+  { id: 40, name: "EVENTOS DE RUA", order: 4, cover: "eventos-de-rua" },
+  { id: 41, name: "MÚSICA E SHOWS", order: 5, cover: "musica" },
+  { id: 42, name: "GASTRONOMIA", order: 6, cover: "gastronomia" },
+  { id: 46, name: "PONTOS TURÍSTICOS", order: 7, cover: "pontos-turisticos" },
+  { id: 43, name: "PARQUES E PRAÇAS", order: 8, cover: "parques-e-pracas" },
+  { id: 44, name: "ARTE E CULTURA", order: 9, cover: "arte-e-cultura" },
+].map(({ cover, ...category }) => ({
   ...category,
-  name_image: `${category.name.toLowerCase()}.png`,
-  path: `${imageSeed}.png`,
-  url: image(imageSeed, 400, 400).url,
+  name_image: `${cover}.svg`,
+  path: `categorias/${cover}.svg`,
+  url: `/categorias/${cover}.svg`,
 }));
 
 export const tags: Tag[] = [

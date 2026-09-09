@@ -1,0 +1,26 @@
+<svg viewBox="0 0 480 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"
+     width="480" height="320" role="img" aria-label="Disco de vinil e ondas sonoras">
+
+  <rect width="480" height="320" fill="#b32f4c"/>
+
+  <g fill="none" stroke-linecap="round">
+    <path d="M96 92 q 34 58 0 116" stroke="#fdb211" stroke-width="11"/>
+    <path d="M56 66 q 56 84 0 168" stroke="#f37422" stroke-width="10" opacity="0.85"/>
+    <path d="M18 44 q 76 106 0 212" stroke="#ffcd3d" stroke-width="9" opacity="0.6"/>
+  </g>
+
+  <g transform="translate(316,150)">
+    <circle r="112" fill="#0d0d0d"/>
+    <g fill="none" stroke="#fff8ec" stroke-width="2" opacity="0.34">
+      <circle r="92"/><circle r="76"/><circle r="60"/>
+    </g>
+    <circle r="34" fill="#fdb211"/>
+    <circle r="7" fill="#0d0d0d"/>
+  </g>
+
+  <g fill="#fff8ec">
+    <rect x="140" y="196" width="19" height="58" rx="9"/>
+    <rect x="170" y="160" width="19" height="94" rx="9"/>
+    <rect x="200" y="212" width="19" height="42" rx="9"/>
+  </g>
+  </svg>
