@@ -12,6 +12,7 @@ import type { EventItem } from "@/data/types";
 import { queryKeys } from "@/hooks/use-events";
 import { collectEvents } from "@/ingest/server";
 import { sources } from "@/ingest/sources";
+import { AGENDA_FIXA } from "@/ingest/sources/agenda-fixa";
 import type { IngestResult } from "@/ingest/types";
 import { formatShortDate } from "@/lib/format";
 
@@ -68,7 +69,8 @@ function ImportPage() {
     <AdminShell>
       <h1 className="mb-1 text-2xl font-bold tracking-tight">Importar eventos</h1>
       <p className="mb-6 max-w-2xl text-sm text-muted-foreground">
-        O coletor visita as fontes cadastradas, extrai o que encontra e traz para a fila de revisão.{" "}
+        O coletor visita as fontes cadastradas, expande a agenda fixa da cidade nas próximas três
+        semanas e traz tudo para a fila de revisão.{" "}
         <strong>Nada é publicado automaticamente</strong> — tu decide o que entra no site.
       </p>
 
@@ -78,18 +80,27 @@ function ImportPage() {
           {sources.map((source) => (
             <li key={source.id} className="flex items-center gap-2 text-sm">
               <span className="font-medium">{source.name}</span>
-              <a
-                href={source.homepage}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-              >
-                {source.homepage.replace(/^https?:\/\//, "")}
-                <ExternalLink className="size-3" />
-              </a>
-              <span className="ml-auto text-xs text-muted-foreground">
-                {source.entrypoints.length} páginas
-              </span>
+              {/* Fonte geradora não tem site para creditar nem página para contar. */}
+              {source.generate ? (
+                <span className="ml-auto text-xs text-muted-foreground">
+                  {AGENDA_FIXA.length} agendas fixas
+                </span>
+              ) : (
+                <>
+                  <a
+                    href={source.homepage}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                  >
+                    {source.homepage.replace(/^https?:\/\//, "")}
+                    <ExternalLink className="size-3" />
+                  </a>
+                  <span className="ml-auto text-xs text-muted-foreground">
+                    {source.entrypoints.length} páginas
+                  </span>
+                </>
+              )}
             </li>
           ))}
         </ul>
