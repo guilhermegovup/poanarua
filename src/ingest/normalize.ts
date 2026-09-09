@@ -295,9 +295,10 @@ export function normalizeEvent(
   const endDate = parseDate(raw.endDate, today);
 
   const description = raw.description?.trim() ?? "";
-  const hour = parseHour(
-    [raw.startDate, stripTags(description).slice(0, 400)].filter(Boolean).join(" "),
-  );
+  // Fonte que sabe o próprio horário tem prioridade sobre a adivinhação.
+  const hour =
+    raw.hour ??
+    parseHour([raw.startDate, stripTags(description).slice(0, 400)].filter(Boolean).join(" "));
 
   const id = nextId++;
   const eventDate = date ? formatBr(date) : "";

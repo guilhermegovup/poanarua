@@ -11,9 +11,10 @@ import type { RawEvent, Source } from "../types";
  * redesenho.
  *
  * Os seletores de HTML ainda não foram conferidos contra o site no ar — o
- * ambiente onde este código foi escrito não alcança o domínio. Rode
- * `npm run ingest -- --source destino-poa --dry-run` para ver o que sai antes
- * de importar de verdade.
+ * ambiente onde este código foi escrito não alcança o domínio. Em
+ * **Admin → Importar → Buscar eventos agora** dá para ver o que sai antes de
+ * mandar qualquer coisa para a fila: a busca só mostra, quem grava é o botão
+ * seguinte.
  */
 
 const HOMEPAGE = "https://destinopoa.com.br";

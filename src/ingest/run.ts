@@ -2,7 +2,7 @@ import type { EventItem, EventSource } from "@/data/types";
 
 import { normalizeEvent } from "./normalize";
 import { findSource, sources } from "./sources";
-import type { IngestResult, Source } from "./types";
+import type { IngestResult, RawEvent, Source } from "./types";
 
 /**
  * Orquestra a coleta: baixa as páginas de cada fonte, extrai, normaliza e
@@ -65,6 +65,35 @@ export async function runSource(source: Source, options: RunOptions = {}): Promi
   // na listagem e no feed.
   const seen = new Set(knownKeys);
 
+  const collect = (raws: RawEvent[]) => {
+    for (const raw of raws) {
+      if (result.events.length >= limit) break;
+
+      const event = normalizeEvent(raw, sourceInfo, today);
+      if (!event) {
+        result.skipped.push({
+          reason: "sem nome utilizável",
+          ...(raw.url ? { url: raw.url } : {}),
+        });
+        continue;
+      }
+
+      if (seen.has(event.dedupe_key!)) {
+        result.duplicates += 1;
+        continue;
+      }
+
+      seen.add(event.dedupe_key!);
+      result.events.push(event);
+    }
+  };
+
+  // Fonte geradora não tem página para baixar: a regra é a própria fonte.
+  if (source.generate) {
+    collect(source.generate(today));
+    return result;
+  }
+
   for (const entrypoint of source.entrypoints) {
     let body: string;
     try {
@@ -88,26 +117,7 @@ export async function runSource(source: Source, options: RunOptions = {}): Promi
       continue;
     }
 
-    for (const raw of raws) {
-      if (result.events.length >= limit) break;
-
-      const event = normalizeEvent(raw, sourceInfo, today);
-      if (!event) {
-        result.skipped.push({
-          reason: "sem nome utilizável",
-          ...(raw.url ? { url: raw.url } : {}),
-        });
-        continue;
-      }
-
-      if (seen.has(event.dedupe_key!)) {
-        result.duplicates += 1;
-        continue;
-      }
-
-      seen.add(event.dedupe_key!);
-      result.events.push(event);
-    }
+    collect(raws);
   }
 
   return result;

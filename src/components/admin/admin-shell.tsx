@@ -53,13 +53,17 @@ export function AdminShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-secondary/30">
       <header className="sticky top-0 z-40 border-b border-border bg-background">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
-          <Link to="/admin" className="flex items-center gap-2">
+        {/*
+          No celular a barra quebra em duas linhas: com logo, duas abas e duas
+          ações numa linha só, "Importar" sobrava numa tira de 30px rolável.
+        */}
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 px-4 py-2 sm:h-16 sm:flex-nowrap sm:py-0">
+          <Link to="/admin" className="flex items-center gap-2 py-1">
             <Brand iconOnly />
             <span className="text-sm font-bold">Admin</span>
           </Link>
 
-          <nav className="ml-4 flex items-center gap-1 overflow-x-auto">
+          <nav className="order-last flex w-full items-center gap-1 overflow-x-auto sm:order-none sm:ml-4 sm:w-auto">
             {LINKS.map((link) => {
               const active = link.exact ? pathname === link.to : pathname.startsWith(link.to);
               return (
@@ -83,7 +87,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
           <Link
             to="/"
-            className="ml-auto flex shrink-0 items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+            className="ml-auto flex shrink-0 items-center gap-1 py-2 text-sm text-muted-foreground hover:text-foreground"
           >
             Ver o site
             <ArrowUpRight className="size-4" />

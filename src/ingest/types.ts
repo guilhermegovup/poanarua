@@ -10,6 +10,11 @@ export interface RawEvent {
   description?: string;
   /** ISO ou o que a fonte devolveu; a normalização resolve. */
   startDate?: string;
+  /**
+   * Faixa de horário já pronta ("09:00-17:00"), quando a fonte sabe dizer.
+   * Sem isso a normalização tenta adivinhar lendo o texto.
+   */
+  hour?: string;
   endDate?: string;
   /** Endereço em texto livre. */
   address?: string;
@@ -44,6 +49,12 @@ export interface Source {
    * para o coletor continuar testável sem rede.
    */
   extract: (body: string, url: string) => RawEvent[];
+  /**
+   * Fonte que não baixa nada: produz os eventos a partir de uma regra.
+   * Quando existe, o coletor ignora os `entrypoints` e chama isto — é como a
+   * agenda fixa (feiras semanais) entra no mesmo pipeline de dedupe e revisão.
+   */
+  generate?: (today: Date) => RawEvent[];
 }
 
 export interface IngestResult {
