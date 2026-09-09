@@ -281,7 +281,7 @@ export const store = {
         prioritized: false,
         banner: "NORMAL",
         visibility: true,
-        image: { url: payload.image || `https://picsum.photos/seed/evento-${id}/800/600` },
+        image: { url: payload.image || "" },
         gallery: [],
         categories: seed.categories.filter((category) => payload.categories?.includes(category.id)),
         tags: payload.tags ?? [],

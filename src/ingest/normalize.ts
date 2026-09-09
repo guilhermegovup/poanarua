@@ -317,9 +317,9 @@ export function normalizeEvent(
     prioritized: false,
     banner: "NORMAL",
     visibility: true,
-    image: {
-      url: raw.imageUrl ?? `https://picsum.photos/seed/evento-${id}/800/600`,
-    },
+    // Sem foto fica sem foto: uma imagem aleatória de banco de imagens parece
+    // foto errada, não foto faltando, e ninguém corrige o que parece pronto.
+    image: { url: raw.imageUrl ?? "" },
     gallery: [],
     categories: inferCategories(raw),
     tags: inferTags(raw),

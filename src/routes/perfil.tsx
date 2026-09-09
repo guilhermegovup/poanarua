@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { CalendarPlus, Heart, Info, LogOut, ShieldCheck, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { EventImage } from "@/components/event/event-image";
 import { AppShell } from "@/components/layout/app-shell";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
@@ -251,10 +252,10 @@ function Profile() {
               key={event.id}
               className="flex items-center gap-3 rounded-xl border border-border p-3"
             >
-              <img
+              <EventImage
                 src={event.image.url}
-                alt=""
-                className="size-16 shrink-0 rounded-lg object-cover"
+                name={event.name}
+                className="size-16 shrink-0 rounded-lg"
               />
               <div className="min-w-0 flex-1">
                 <Link

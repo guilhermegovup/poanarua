@@ -13,6 +13,7 @@ fonte  →  extrair  →  normalizar  →  deduplicar  →  fila de revisão  �
 | Etapa      | Onde                       | O que faz                                           |
 | ---------- | -------------------------- | --------------------------------------------------- |
 | Extrair    | `src/ingest/extract.ts`    | Lê JSON-LD `schema.org/Event` e feeds RSS/Atom      |
+| Enriquecer | `src/ingest/extract.ts`    | Abre a página do evento atrás da foto e do texto    |
 | Fonte      | `src/ingest/sources/`      | Pontos de entrada e, se preciso, seletores próprios |
 | Gerar      | `src/ingest/recurrence.ts` | Expande a agenda fixa da cidade em datas reais      |
 | Normalizar | `src/ingest/normalize.ts`  | Datas em pt-BR, horários, categorias e tags         |
@@ -42,6 +43,40 @@ PoaNaRuaBot/1.0 (+https://poanarua.com.br)
 
 Pelo webadmin, em **Admin → Importar → Buscar eventos agora**. O botão só
 **mostra** o que encontrou — nada é gravado até "Mandar tudo para revisão".
+
+## Por que abrir a página de cada evento
+
+Uma listagem de agenda dá título, link e, com sorte, uma miniatura. **A foto de
+verdade e o texto ficam na página de dentro.** Sem abrir cada uma, a fila de
+revisão enche de card com nome e mais nada — e aí não dá para decidir o que
+publicar sem visitar o site da fonte, um por um.
+
+Então o coletor faz uma segunda passada: para cada evento que tem link e está
+sem foto **ou** sem texto, abre a página e lê, nesta ordem:
+
+1. **JSON-LD `schema.org/Event`** — estruturado, traz até endereço e horário
+2. **Open Graph** (`og:image`, `og:description`) — é o que todo site publica
+   para o link ficar bonito no WhatsApp, então quase sempre tem foto e resumo
+3. **`<meta name="description">`** — último recurso
+
+**A listagem manda.** O detalhe só preenche buraco, nunca sobrescreve: a
+listagem já provou estar certa sobre nome e link.
+
+Uma página que não abre não derruba o evento — ele entra com o que a listagem
+trouxe, e o motivo aparece em "descartados" na tela de importação.
+
+Tetos: `enrichLimit` (40 páginas por rodada) evita que uma fonte com 300 itens
+vire 300 requisições. `enrich: false` desliga a passada inteira, para
+diagnosticar uma fonte rápido.
+
+### Evento sem foto fica sem foto
+
+Antes, evento sem imagem ganhava uma foto aleatória de banco de imagens. Uma
+montanha nevada em cima de "Copa do Mundo" não parece foto faltando — parece
+foto errada, e ninguém vai atrás de corrigir o que aparenta estar pronto.
+
+Agora aparece um espaço da marca dizendo que falta foto. É honesto e pede a
+correção, que se faz no webadmin.
 
 ## Agenda fixa: o que nenhuma fonte publica
 

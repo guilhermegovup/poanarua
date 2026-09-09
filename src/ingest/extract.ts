@@ -216,6 +216,82 @@ export function extractJsonLd(body: string, pageUrl: string): RawEvent[] {
   return events;
 }
 
+/* ------------------------------------------------------ página do evento */
+
+/** Lê uma `<meta>` por `property` (Open Graph) ou por `name`. */
+function metaContent(body: string, key: string): string | undefined {
+  const pattern = new RegExp(
+    `<meta[^>]+(?:property|name)=["']${key}["'][^>]*content=["']([^"']*)["']`,
+    "i",
+  );
+  const reversed = new RegExp(
+    `<meta[^>]+content=["']([^"']*)["'][^>]*(?:property|name)=["']${key}["']`,
+    "i",
+  );
+  const value = pattern.exec(body)?.[1] ?? reversed.exec(body)?.[1];
+  return value ? decodeEntities(value).trim() || undefined : undefined;
+}
+
+/**
+ * Extrai o que só existe na página do próprio evento.
+ *
+ * A listagem de uma agenda traz título, link e às vezes uma miniatura. A foto
+ * de verdade e o texto ficam na página de dentro — sem abrir cada uma, o que
+ * chega na fila de revisão é um card com nome e mais nada.
+ *
+ * Ordem: JSON-LD primeiro (estruturado), Open Graph depois (é o que todo site
+ * publica para o link ficar bonito no WhatsApp, então quase sempre tem foto e
+ * resumo), e por último a `<meta name="description">`.
+ */
+export function extractDetail(body: string, pageUrl: string): Partial<RawEvent> {
+  const detail: Partial<RawEvent> = {};
+
+  // O JSON-LD da página de detalhe costuma ser o evento inteiro.
+  const [structured] = extractJsonLd(body, pageUrl);
+  if (structured) {
+    const { name: _ignored, ...rest } = structured;
+    Object.assign(detail, rest);
+  }
+
+  const ogImage =
+    metaContent(body, "og:image") ??
+    metaContent(body, "og:image:secure_url") ??
+    metaContent(body, "twitter:image");
+  const resolvedImage = absoluteUrl(ogImage, pageUrl);
+  if (!detail.imageUrl && resolvedImage) detail.imageUrl = resolvedImage;
+
+  const summary =
+    metaContent(body, "og:description") ??
+    metaContent(body, "twitter:description") ??
+    metaContent(body, "description");
+  if (!detail.description && summary) detail.description = summary;
+
+  return detail;
+}
+
+/**
+ * Junta o que veio da listagem com o que veio da página do evento.
+ *
+ * A listagem manda: ela já provou estar certa sobre nome e link. O detalhe só
+ * preenche buraco — foto, texto, endereço, horário —, nunca sobrescreve.
+ */
+export function mergeDetail(listed: RawEvent, detail: Partial<RawEvent>): RawEvent {
+  const merged: RawEvent = { ...listed };
+
+  for (const [key, value] of Object.entries(detail) as [keyof RawEvent, unknown][]) {
+    if (value === undefined || value === null || value === "") continue;
+    if (Array.isArray(value) && value.length === 0) continue;
+
+    const current = merged[key];
+    const empty =
+      current === undefined || current === "" || (Array.isArray(current) && current.length === 0);
+
+    if (empty) Object.assign(merged, { [key]: value });
+  }
+
+  return merged;
+}
+
 /* ---------------------------------------------------------------- RSS/Atom */
 
 function tagContent(block: string, tag: string): string | undefined {

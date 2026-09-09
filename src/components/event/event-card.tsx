@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Clock, MapPin } from "lucide-react";
 
+import { EventImage } from "@/components/event/event-image";
 import { FavoriteButton } from "@/components/event/favorite-button";
 import type { EventItem } from "@/data/types";
 import { formatHour, formatShortDate } from "@/lib/format";
@@ -25,11 +26,10 @@ export function EventCard({ event, className }: Props) {
         className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-card transition-[box-shadow,border-color,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift"
       >
         <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-          <img
+          <EventImage
             src={event.image.url}
-            alt=""
-            loading="lazy"
-            className="size-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+            name={event.name}
+            className="size-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
           />
 
           <span className="absolute left-3 top-3 rounded-md bg-primary px-2 py-1 text-[11px] font-bold uppercase leading-none tracking-wide text-primary-foreground shadow-card">

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarPlus, ExternalLink, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { EventImage } from "@/components/event/event-image";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { STATUS_LABEL, StatusBadge } from "@/components/admin/status-badge";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -242,12 +243,7 @@ function AdminRow({
         className="mt-1"
       />
 
-      <img
-        src={event.image.url}
-        alt=""
-        loading="lazy"
-        className="size-16 shrink-0 rounded-md object-cover"
-      />
+      <EventImage src={event.image.url} name={event.name} className="size-16 shrink-0 rounded-md" />
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">

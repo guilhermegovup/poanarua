@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, DownloadCloud, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
+import { EventImage } from "@/components/event/event-image";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
 import { api } from "@/data/api";
@@ -168,11 +169,10 @@ function ImportPage() {
                     key={event.dedupe_key ?? event.id}
                     className="flex gap-3 rounded-lg border border-border bg-background p-3"
                   >
-                    <img
+                    <EventImage
                       src={event.image.url}
-                      alt=""
-                      loading="lazy"
-                      className="size-14 shrink-0 rounded-md object-cover"
+                      name={event.name}
+                      className="size-14 shrink-0 rounded-md"
                     />
                     <div className="min-w-0 flex-1">
                       <p className="line-clamp-1 font-medium">{event.name}</p>

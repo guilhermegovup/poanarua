@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { EventImage } from "@/components/event/event-image";
 import { EventCard } from "@/components/event/event-card";
 import { FavoriteButton } from "@/components/event/favorite-button";
 import { GoEvent } from "@/components/event/go-event";
@@ -51,9 +52,14 @@ export const Route = createFileRoute("/evento/$id")({
         { name: "description", content: description },
         { property: "og:title", content: event.name },
         { property: "og:description", content: description },
-        { property: "og:image", content: event.image.url },
+        // og:image vazio faz o WhatsApp mostrar um retângulo quebrado; melhor
+        // não prometer imagem nenhuma e deixar o cartão só com texto.
+        ...(event.image.url ? [{ property: "og:image", content: event.image.url }] : []),
         { property: "og:type", content: "article" },
-        { name: "twitter:card", content: "summary_large_image" },
+        {
+          name: "twitter:card",
+          content: event.image.url ? "summary_large_image" : "summary",
+        },
       ],
     };
   },
@@ -80,7 +86,7 @@ function EventPage() {
       <article>
         <div className="relative">
           <div className="aspect-[4/3] w-full overflow-hidden bg-secondary sm:aspect-[21/9]">
-            <img src={event.image.url} alt="" className="size-full object-cover" />
+            <EventImage src={event.image.url} name={event.name} className="size-full" priority />
           </div>
 
           <Button

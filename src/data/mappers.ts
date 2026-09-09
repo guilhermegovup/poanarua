@@ -106,7 +106,7 @@ export function toEvent(row: EventRow): EventItem {
     banner: (row.banner as EventItem["banner"]) ?? "NORMAL",
     visibility: true,
     image: {
-      url: row.image_url ?? `https://picsum.photos/seed/evento-${row.id}/800/600`,
+      url: row.image_url ?? "",
     },
     gallery: [],
     categories,

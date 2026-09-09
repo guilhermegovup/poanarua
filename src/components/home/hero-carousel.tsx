@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { EventImage } from "@/components/event/event-image";
 import type { EventItem } from "@/data/types";
 import { formatHour, formatLongDate } from "@/lib/format";
 
@@ -29,10 +30,11 @@ export function HeroCarousel({ events }: { events: EventItem[] }) {
               params={{ id: String(event.id) }}
               className="group relative block aspect-[4/5] overflow-hidden rounded-2xl shadow-card sm:aspect-[16/9] lg:aspect-[21/9]"
             >
-              <img
+              <EventImage
                 src={event.image_banner?.url ?? event.image.url}
-                alt=""
-                className="size-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                name={event.name}
+                priority
+                className="size-full transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
               />
               {/* Duas camadas: uma sombra vinda de baixo e um véu de marca, para
                   o texto ficar legível sobre qualquer capa. */}
